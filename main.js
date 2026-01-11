@@ -3,10 +3,9 @@
   if (!D) return;
 
   const LS = {
-    cart: "lastbite_cart_v1",
-    orders: "lastbite_orders_v1",
-    profile: "lastbite_profile_v1",
-    impact: "lastbite_user_impact_v1"
+    cart: "lastbite_cart_v2",
+    orders: "lastbite_orders_v2",
+    impact: "lastbite_user_impact_v2"
   };
 
   function readJSON(key, fallback) {
@@ -50,14 +49,14 @@
     el.className = "toast";
     el.textContent = msg;
     toastRoot.appendChild(el);
-    setTimeout(() => el.remove(), 3000);
+    setTimeout(() => el.remove(), 2800);
   }
 
   function closeModal() {
     if (!modalRoot) return;
     if (modalRoot._cleanup) modalRoot._cleanup();
-    modalRoot.classList.remove("isOpen");   // IMPORTANT
-    modalRoot.hidden = true;                // extra safety
+    modalRoot.classList.remove("isOpen");
+    modalRoot.hidden = true;
     modalRoot.innerHTML = "";
     modalRoot._cleanup = null;
   }
@@ -65,7 +64,7 @@
   function openModal({ title, bodyHTML, footerHTML, onMount }) {
     if (!modalRoot) return;
     modalRoot.hidden = false;
-    modalRoot.classList.add("isOpen");      // IMPORTANT
+    modalRoot.classList.add("isOpen");
     modalRoot.innerHTML = `
       <div class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}">
         <div class="modal__head">
@@ -191,7 +190,7 @@
     return { lines, subtotal, original, savings };
   }
 
-  function computeImpactForCheckout(lines) {
+  function computeImpactForOrder(lines) {
     const meals = lines.reduce((s, l) => s + l.qty, 0);
     const kgFood = meals * D.IMPACT.kgFoodPerMeal;
     const kgCO2e = meals * D.IMPACT.kgCO2ePerMeal;
@@ -205,166 +204,38 @@
     return { meals, kgFood, kgCO2e, donated, grossProfit };
   }
 
-  function openCartModal() {
-    const cart = getCart();
-    const { lines, subtotal, original, savings } = cartTotals(cart);
-    const impact = computeImpactForCheckout(lines.map((l) => ({ qty: l.qty, mode: l.mode })));
-
-    const bodyHTML = lines.length
-      ? `
-        <div class="grid" style="gap:12px;">
-          ${lines
-            .map(
-              (l) => `
-                <div class="card" style="border-radius:16px;">
-                  <div class="card__pad" style="display:flex; gap:12px; justify-content:space-between; align-items:flex-start;">
-                    <div style="min-width:0;">
-                      <div class="tiny muted">${escapeHTML(l.deal.partner)} • ${escapeHTML(l.deal.category)}</div>
-                      <div style="font-weight:1100; letter-spacing:-0.02em;">${escapeHTML(l.deal.title)}</div>
-                      <div class="tiny muted" style="margin-top:4px;">Mode: <strong>${l.mode === "delivery" ? "Delivery" : "Pickup"}</strong></div>
-                      <div class="tiny muted">Price: <strong>${money(l.deal.price)}</strong> (was ${money(l.deal.originalValue)})</div>
-                    </div>
-
-                    <div style="display:flex; align-items:center; gap:8px;">
-                      <button class="btn btn--ghost" type="button" data-qtyminus="${escapeHTML(l.deal.id)}">−</button>
-                      <strong>${l.qty}</strong>
-                      <button class="btn btn--ghost" type="button" data-qtyplus="${escapeHTML(l.deal.id)}">+</button>
-                    </div>
-                  </div>
-                </div>
-              `
-            )
-            .join("")}
-
-          <div class="card">
-            <div class="card__pad">
-              <div style="display:flex; justify-content:space-between; gap:12px;">
-                <span class="muted">Subtotal</span><strong>${money(subtotal)}</strong>
-              </div>
-              <div style="display:flex; justify-content:space-between; gap:12px; margin-top:6px;">
-                <span class="muted">Estimated value</span><span class="muted">${money(original)}</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; gap:12px; margin-top:6px;">
-                <span class="muted">Estimated savings</span><strong>${money(savings)}</strong>
-              </div>
-
-              <hr class="hr" />
-
-              <div class="grid" style="gap:10px;">
-                <div class="tiny muted"><strong>Your estimated impact (this checkout)</strong></div>
-                <div class="grid grid--4" style="gap:10px;">
-                  <div class="badge badge--lime">🍽️ ${impact.meals} meals</div>
-                  <div class="badge">🥕 ${round1(impact.kgFood)} kg food</div>
-                  <div class="badge">🌿 ${round1(impact.kgCO2e)} kg CO₂e</div>
-                  <div class="badge badge--orange">🎗️ ${money(impact.donated)} donation</div>
-                </div>
-                <div class="tiny muted">Donation estimate = 5% of assumed gross profit (demo).</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-      : `<p class="muted">Your cart is empty. Add a deal from <a href="./browse-deals.html">Browse Deals</a>.</p>`;
-
-    openModal({
-      title: "Cart (demo checkout)",
-      bodyHTML,
-      footerHTML: `
-        <button class="btn btn--ghost" type="button" data-close="1">Close</button>
-        <button class="btn btn--primary" type="button" id="checkoutBtn" ${lines.length ? "" : "disabled"}>Checkout (demo)</button>
-      `,
-      onMount: (root) => {
-        root.querySelectorAll("[data-qtyminus]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const id = btn.getAttribute("data-qtyminus");
-            const cart = getCart();
-            const idx = cart.findIndex((x) => x.id === id);
-            if (idx >= 0) {
-              cart[idx].qty = Math.max(0, cart[idx].qty - 1);
-              if (cart[idx].qty === 0) cart.splice(idx, 1);
-              setCart(cart);
-              closeModal();
-              openCartModal();
-            }
-          });
-        });
-
-        root.querySelectorAll("[data-qtyplus]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const id = btn.getAttribute("data-qtyplus");
-            const cart = getCart();
-            const idx = cart.findIndex((x) => x.id === id);
-            if (idx >= 0) {
-              cart[idx].qty += 1;
-              setCart(cart);
-              closeModal();
-              openCartModal();
-            }
-          });
-        });
-
-        const checkoutBtn = root.querySelector("#checkoutBtn");
-        if (checkoutBtn) {
-          checkoutBtn.addEventListener("click", () => {
-            const linesNow = cartLines(getCart());
-            if (!linesNow.length) return;
-
-            const totalsNow = cartTotals(getCart());
-            const impactNow = computeImpactForCheckout(linesNow.map((l) => ({ qty: l.qty, mode: l.mode })));
-
-            const order = {
-              id: "ord_" + Date.now(),
-              ts: Date.now(),
-              lines: linesNow.map((l) => ({ id: l.deal.id, qty: l.qty, mode: l.mode })),
-              subtotal: totalsNow.subtotal,
-              original: totalsNow.original,
-              savings: totalsNow.savings,
-              impact: impactNow
-            };
-
-            const orders = readJSON(LS.orders, []);
-            orders.unshift(order);
-            writeJSON(LS.orders, orders.slice(0, 30));
-
-            const ui = getUserImpact();
-            const next = {
-              meals: ui.meals + impactNow.meals,
-              kgFood: ui.kgFood + impactNow.kgFood,
-              kgCO2e: ui.kgCO2e + impactNow.kgCO2e,
-              donated: ui.donated + impactNow.donated,
-              savings: ui.savings + totalsNow.savings
-            };
-            setUserImpact(next);
-
-            setCart([]);
-            closeModal();
-            toast("Checkout complete (demo): +" + impactNow.meals + " meals rescued");
-
-            if (document.body.getAttribute("data-page") === "impact") initImpactPage();
-            if (document.body.getAttribute("data-page") === "home") initHomePage();
-          });
-        }
-      }
-    });
-  }
-
   function pctOff(deal) {
     return Math.round((1 - deal.price / deal.originalValue) * 100);
   }
+
   function parseEndTimeToday(hhmm) {
     const [h, m] = hhmm.split(":").map(Number);
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0, 0);
   }
+
   function endsLabel(windowEnd) {
     const end = parseEndTimeToday(windowEnd);
     const now = new Date();
     const diff = end.getTime() - now.getTime();
-    if (diff <= 0) return { text: "Ended", severity: "muted" };
+    if (diff <= 0) return { text: "Pickup closed", severity: "muted" };
     const mins = Math.round(diff / 60000);
     if (mins <= 120) return { text: "Ends in " + mins + "m", severity: "orange" };
     const time = end.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     return { text: "Ends " + time, severity: "muted" };
+  }
+
+  function addToCart(dealId, mode, qty) {
+    const deal = D.DEALS.find((x) => x.id === dealId);
+    if (!deal) return;
+
+    const cart = getCart();
+    const existing = cart.find((x) => x.id === dealId && x.mode === mode);
+    if (existing) existing.qty += qty;
+    else cart.push({ id: dealId, mode, qty });
+    setCart(cart);
+
+    toast("Added: " + deal.title);
   }
 
   function buildDealCard(deal) {
@@ -379,7 +250,9 @@
 
     const deliveryBadge = deal.deliveryAvailable
       ? `<span class="badge badge--lime">🚚 Delivery</span>`
-      : `<span class="badge">🏃 Pickup only</span>`;
+      : `<span class="badge">🏃 Pickup</span>`;
+
+    const canOrder = end.text !== "Pickup closed";
 
     return `
       <article class="card dealCard">
@@ -407,8 +280,11 @@
           </div>
 
           <div class="dealActions">
-            <button class="btn btn--primary btn--block" type="button" data-reserve="${escapeHTML(deal.id)}">
-              Reserve (demo)
+            <button class="btn btn--primary btn--block" type="button" data-reserve="${escapeHTML(deal.id)}" ${canOrder ? "" : "disabled"}>
+              Choose pickup/delivery
+            </button>
+            <button class="btn btn--ghost btn--block" type="button" data-quickadd="${escapeHTML(deal.id)}" ${canOrder ? "" : "disabled"}>
+              Quick add (Pickup)
             </button>
           </div>
         </div>
@@ -423,7 +299,7 @@
     const off = pctOff(deal);
 
     openModal({
-      title: "Reserve (demo)",
+      title: "Add to cart",
       bodyHTML: `
         <div class="grid" style="gap:12px;">
           <div>
@@ -466,7 +342,7 @@
                 </div>
 
                 <div class="tiny muted">
-                  Impact estimate per meal: ${D.IMPACT.kgFoodPerMeal} kg food saved • ${D.IMPACT.kgCO2ePerMeal} kg CO₂e avoided (demo).
+                  Estimated impact per meal: ${D.IMPACT.kgFoodPerMeal} kg food saved • ${D.IMPACT.kgCO2ePerMeal} kg CO₂e avoided.
                 </div>
               </div>
             </div>
@@ -489,15 +365,8 @@
         root.querySelector("#addToCartBtn").addEventListener("click", () => {
           const mode = modeSelect.value;
           const qty = Number(qtySelect.value);
-
-          const cart = getCart();
-          const existing = cart.find((x) => x.id === deal.id && x.mode === mode);
-          if (existing) existing.qty += qty;
-          else cart.push({ id: deal.id, mode, qty });
-
-          setCart(cart);
+          addToCart(deal.id, mode, qty);
           closeModal();
-          toast("Added to cart: " + deal.title);
         });
       }
     });
@@ -525,14 +394,14 @@
       .map((p, i) => `<option value="${i === 0 ? "all" : escapeHTML(p)}">${escapeHTML(p)}</option>`)
       .join("");
 
-    const tagOptions = ["All tags", "Pickup", "Delivery", "Vegetarian", "Nut-free", "Limited", "Best value"];
+    const tagOptions = ["All", "Vegetarian", "Dairy-free", "Nut-free", "Gluten-free", "Limited", "Best value", "Delivery"];
     tagEl.innerHTML = tagOptions
       .map((t, i) => `<option value="${i === 0 ? "all" : escapeHTML(t)}">${escapeHTML(t)}</option>`)
       .join("");
 
     const sortOptions = [
       { v: "recommended", t: "Recommended" },
-      { v: "bestValue", t: "Best value" },
+      { v: "bestValue", t: "Biggest discount" },
       { v: "endingSoon", t: "Ending soon" },
       { v: "nearest", t: "Nearest" },
       { v: "lowestPrice", t: "Lowest price" }
@@ -540,7 +409,6 @@
     sortEl.innerHTML = sortOptions.map((o) => `<option value="${o.v}">${o.t}</option>`).join("");
 
     const state = { category: "All", q: "", partner: "all", tag: "all", sort: "recommended" };
-
     function normalize(s) { return String(s).toLowerCase(); }
 
     function matches(deal) {
@@ -555,8 +423,7 @@
       const tagOk = (function () {
         if (state.tag === "all") return true;
         const t = normalize(state.tag);
-        if (t === "delivery") return deal.deliveryAvailable;
-        if (t === "pickup") return true;
+        if (t === "delivery") return !!deal.deliveryAvailable;
         const bucket = new Set([].concat(deal.tags || []).concat(deal.dietary || []).map(normalize));
         return bucket.has(t);
       })();
@@ -585,6 +452,10 @@
       gridEl.querySelectorAll("[data-reserve]").forEach((btn) => {
         btn.addEventListener("click", () => openReserveModal(btn.getAttribute("data-reserve")));
       });
+
+      gridEl.querySelectorAll("[data-quickadd]").forEach((btn) => {
+        btn.addEventListener("click", () => addToCart(btn.getAttribute("data-quickadd"), "pickup", 1));
+      });
     }
 
     chipsEl.addEventListener("click", (e) => {
@@ -608,76 +479,42 @@
   }
 
   function initHomePage() {
-    const form = document.getElementById("areaForm");
-    const postal = document.getElementById("postal");
-    const clear = document.getElementById("clearPostal");
-    const hint = document.getElementById("pilotHint");
-
-    const profile = readJSON(LS.profile, { postal: "" });
-    if (postal && profile.postal) postal.value = profile.postal;
-
-    if (hint) hint.textContent = "Prototype pilot logic: treats prefixes " + D.PILOT_PREFIXES.join(", ") + " as “in pilot”.";
+    const highlights = document.getElementById("homeHighlights");
+    if (highlights) {
+      highlights.innerHTML = `
+        <div class="badge badge--lime">Surplus-only listings</div>
+        <div class="badge">Pickup windows near closing</div>
+        <div class="badge badge--orange">5% profits donated</div>
+      `;
+    }
 
     const ui = getUserImpact();
-    const c = D.IMPACT.communityBase;
-    const combined = {
-      meals: c.meals + ui.meals,
-      kgFood: c.kgFood + ui.kgFood,
-      kgCO2e: c.kgCO2e + ui.kgCO2e,
-      donated: c.donated + ui.donated,
-      savings: c.savings + ui.savings
-    };
-
     const row1 = document.getElementById("homeImpactRow1");
     const row2 = document.getElementById("homeImpactRow2");
     if (row1) {
       row1.innerHTML = `
-        <div class="badge badge--lime">🍽️ ${combined.meals.toLocaleString()} meals</div>
-        <div class="badge">🥕 ${Math.round(combined.kgFood).toLocaleString()} kg food</div>
-        <div class="badge">🌿 ${Math.round(combined.kgCO2e).toLocaleString()} kg CO₂e</div>
+        <div class="badge badge--lime">🍽️ ${ui.meals.toLocaleString()} meals</div>
+        <div class="badge">🥕 ${Math.round(ui.kgFood).toLocaleString()} kg food</div>
+        <div class="badge">🌿 ${Math.round(ui.kgCO2e).toLocaleString()} kg CO₂e</div>
       `;
     }
     if (row2) {
       row2.innerHTML = `
-        <div class="badge badge--orange">🎗️ ${money(combined.donated)} donated</div>
-        <div class="badge">💸 ${money(combined.savings)} saved</div>
-        <div class="badge">📍 Pilot: ${profile.postal ? escapeHTML(profile.postal.toUpperCase()) : "not set"}</div>
+        <div class="badge badge--orange">🎗️ ${money(ui.donated)} donated</div>
+        <div class="badge">💸 ${money(ui.savings)} saved</div>
+        <div class="badge">🏷️ ${D.DEALS.length} deals tonight</div>
       `;
     }
 
-    if (form && postal) {
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const val = (postal.value || "").trim().toUpperCase();
-        writeJSON(LS.profile, { postal: val });
-
-        const prefix = val.replace(/\s+/g, "").slice(0, 2);
-        const ok = D.PILOT_PREFIXES.includes(prefix);
-
-        toast(ok ? "You're in our pilot zone (demo): " + val : "Not in pilot yet (demo): " + val + " — join the beta list.");
-        initHomePage();
-      });
-    }
-
-    if (clear) {
-      clear.addEventListener("click", () => {
-        writeJSON(LS.profile, { postal: "" });
-        if (postal) postal.value = "";
-        toast("Pilot location cleared.");
-        initHomePage();
-      });
-    }
-
-    const waitlistForm = document.getElementById("waitlistForm");
-    const waitlistMsg = document.getElementById("waitlistMsg");
+    const updatesForm = document.getElementById("updatesForm");
+    const updatesMsg = document.getElementById("updatesMsg");
     const email = document.getElementById("email");
-    if (waitlistForm && waitlistMsg && email) {
-      waitlistForm.addEventListener("submit", (e) => {
+    if (updatesForm && updatesMsg && email) {
+      updatesForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const em = email.value.trim();
-        waitlistMsg.textContent = em ? "Thanks — added (demo): " + em : "Please enter an email.";
-        toast("Joined beta list (demo).");
-        waitlistForm.reset();
+        updatesMsg.textContent = "Subscribed: " + email.value.trim();
+        toast("Subscribed");
+        updatesForm.reset();
       });
     }
   }
@@ -686,11 +523,11 @@
     openModal({
       title: "Become a partner",
       bodyHTML: `
-        <p class="muted">Partnership interest form (prototype).</p>
+        <p class="muted">List surplus near closing and turn waste into revenue.</p>
         <form id="partnerForm" class="grid" style="gap:10px;">
           <div class="field">
             <label for="biz">Business name</label>
-            <input id="biz" placeholder="e.g., SanRemo Bakery" required />
+            <input id="biz" placeholder="Business name" required />
           </div>
           <div class="field">
             <label for="name">Contact name</label>
@@ -702,21 +539,20 @@
           </div>
           <div class="field">
             <label for="notes">Notes</label>
-            <input id="notes" placeholder="Surplus types, closing time, location…" />
+            <input id="notes" placeholder="Closing time, surplus types, location…" />
           </div>
-          <div class="tiny muted">Demo only. Wire to a backend or Google Form when launching.</div>
         </form>
       `,
       footerHTML: `
         <button class="btn btn--ghost" type="button" data-close="1">Cancel</button>
-        <button class="btn btn--primary" type="button" id="partnerSubmit">Submit (demo)</button>
+        <button class="btn btn--primary" type="button" id="partnerSubmit">Submit</button>
       `,
       onMount: (root) => {
         root.querySelector("#partnerSubmit").addEventListener("click", () => {
           const form = root.querySelector("#partnerForm");
           if (!form.reportValidity()) return;
           closeModal();
-          toast("Submitted (demo).");
+          toast("Thanks — we’ll reach out soon.");
         });
       }
     });
@@ -733,16 +569,6 @@
 
   function initImpactPage() {
     const ui = getUserImpact();
-    const c = D.IMPACT.communityBase;
-
-    const combined = {
-      meals: c.meals + ui.meals,
-      kgFood: c.kgFood + ui.kgFood,
-      kgCO2e: c.kgCO2e + ui.kgCO2e,
-      donated: c.donated + ui.donated,
-      savings: c.savings + ui.savings
-    };
-
     const orders = readJSON(LS.orders, []);
 
     const y1 = document.getElementById("yourImpactRow1");
@@ -762,21 +588,9 @@
       `;
     }
 
-    const c1 = document.getElementById("communityRow1");
-    const c2 = document.getElementById("communityRow2");
-    if (c1) {
-      c1.innerHTML = `
-        <div class="badge badge--lime">🍽️ ${combined.meals.toLocaleString()} meals</div>
-        <div class="badge">🥕 ${Math.round(combined.kgFood).toLocaleString()} kg</div>
-        <div class="badge">🌿 ${Math.round(combined.kgCO2e).toLocaleString()} kg CO₂e</div>
-      `;
-    }
-    if (c2) {
-      c2.innerHTML = `
-        <div class="badge badge--orange">🎗️ ${money(combined.donated)} donated</div>
-        <div class="badge">💸 ${money(combined.savings)} saved</div>
-        <div class="badge">🏷️ Deals: ${D.DEALS.length}</div>
-      `;
+    const factorLine = document.getElementById("factorLine");
+    if (factorLine) {
+      factorLine.textContent = `${D.IMPACT.kgFoodPerMeal} kg food/meal • ${D.IMPACT.kgCO2ePerMeal} kg CO₂e/meal`;
     }
 
     const recent = document.getElementById("recentOrders");
@@ -788,7 +602,7 @@
         const title = o.lines
           .map((l) => {
             const deal = D.DEALS.find((x) => x.id === l.id);
-            return deal ? `${l.qty}× ${deal.title}` : `${l.qty}× (unknown)`;
+            return deal ? `${l.qty}× ${deal.title}` : `${l.qty}× Item`;
           })
           .join(" • ");
 
@@ -805,14 +619,14 @@
               <div class="grid grid--3" style="margin-top:8px; gap:10px;">
                 <div class="badge badge--orange">🎗️ ${money(o.impact.donated)} donated</div>
                 <div class="badge">💸 ${money(o.savings)} saved</div>
-                <div class="badge">🧾 ${money(o.subtotal)} paid</div>
+                <div class="badge">🧾 ${money(o.subtotal)} total</div>
               </div>
             </div>
           </div>
         `;
       }).join("");
 
-      recent.innerHTML = rows || `<div class="card"><div class="card__pad"><p class="muted">No checkouts yet. Add deals to cart and run a demo checkout.</p></div></div>`;
+      recent.innerHTML = rows || `<div class="card"><div class="card__pad"><p class="muted">No orders yet. Add deals and place an order from your cart.</p></div></div>`;
     }
 
     const reset = document.getElementById("resetImpact");
@@ -822,36 +636,214 @@
         localStorage.removeItem(LS.impact);
         localStorage.removeItem(LS.cart);
         renderCartCount();
-        toast("Reset complete.");
+        toast("Impact reset.");
         initImpactPage();
       });
     }
   }
 
-  function initFooterLinks() {
-    const contact = document.getElementById("contactLink");
-    if (contact) {
-      contact.addEventListener("click", (e) => {
-        e.preventDefault();
-        openModal({
-          title: "Contact",
-          bodyHTML: `
-            <p class="muted">Prototype contact (demo).</p>
-            <p><strong>Email:</strong> hello@lastbite.example</p>
-            <p class="tiny muted">Replace with a real inbox when launching.</p>
-          `,
-          footerHTML: `<button class="btn btn--primary" type="button" data-close="1">Done</button>`
-        });
-      });
+  function initCartPage() {
+    const itemsEl = document.getElementById("cartItems");
+    const emptyEl = document.getElementById("cartEmpty");
+    const summaryEl = document.getElementById("cartSummary");
+    const form = document.getElementById("checkoutForm");
+    const msg = document.getElementById("orderMsg");
+    const placeBtn = document.getElementById("placeOrderBtn");
+
+    if (!itemsEl || !emptyEl || !summaryEl || !form || !msg || !placeBtn) return;
+
+    function render() {
+      const cart = getCart();
+      const { lines, subtotal, original, savings } = cartTotals(cart);
+
+      emptyEl.style.display = lines.length ? "none" : "block";
+
+      itemsEl.innerHTML = lines.map((l) => {
+        const deliveryOption = l.deal.deliveryAvailable
+          ? `<option value="delivery" ${l.mode === "delivery" ? "selected" : ""}>Delivery</option>`
+          : "";
+
+        return `
+          <div class="card" style="border-radius:16px;">
+            <div class="card__pad" style="display:flex; gap:12px; justify-content:space-between; align-items:flex-start;">
+              <div style="min-width:0;">
+                <div class="tiny muted">${escapeHTML(l.deal.partner)} • ${escapeHTML(l.deal.category)}</div>
+                <div style="font-weight:1100; letter-spacing:-0.02em;">${escapeHTML(l.deal.title)}</div>
+                <div class="tiny muted" style="margin-top:6px;">
+                  <strong>${money(l.deal.price)}</strong> <span style="text-decoration:line-through; color:rgba(11,15,13,0.55); font-weight:900;">${money(l.deal.originalValue)}</span>
+                </div>
+                <div class="tiny muted" style="margin-top:6px;">Pickup window: <strong>${escapeHTML(l.deal.window)}</strong></div>
+
+                <div class="field" style="margin-top:10px;">
+                  <label for="mode_${escapeHTML(l.deal.id)}">Pickup / delivery</label>
+                  <select id="mode_${escapeHTML(l.deal.id)}" data-mode="${escapeHTML(l.deal.id)}">
+                    <option value="pickup" ${l.mode === "pickup" ? "selected" : ""}>Pickup</option>
+                    ${deliveryOption}
+                  </select>
+                </div>
+              </div>
+
+              <div style="display:grid; gap:10px; justify-items:end;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <button class="btn btn--ghost" type="button" data-qtyminus="${escapeHTML(l.deal.id)}" data-modekey="${escapeHTML(l.mode)}">−</button>
+                  <strong>${l.qty}</strong>
+                  <button class="btn btn--ghost" type="button" data-qtyplus="${escapeHTML(l.deal.id)}" data-modekey="${escapeHTML(l.mode)}">+</button>
+                </div>
+                <button class="btn btn--ghost" type="button" data-remove="${escapeHTML(l.deal.id)}" data-modekey="${escapeHTML(l.mode)}">Remove</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      summaryEl.innerHTML = `
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <span class="muted">Subtotal</span><strong>${money(subtotal)}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <span class="muted">Original value</span><span class="muted">${money(original)}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <span class="muted">You save</span><strong>${money(savings)}</strong>
+        </div>
+      `;
+
+      placeBtn.disabled = lines.length === 0;
     }
 
-    const partner = document.getElementById("partnerLink");
-    if (partner) {
-      partner.addEventListener("click", (e) => {
-        e.preventDefault();
-        openPartnerModal();
-      });
+    function updateQty(id, mode, delta) {
+      const cart = getCart();
+      const idx = cart.findIndex((x) => x.id === id && x.mode === mode);
+      if (idx < 0) return;
+      cart[idx].qty = Math.max(0, (cart[idx].qty || 0) + delta);
+      if (cart[idx].qty === 0) cart.splice(idx, 1);
+      setCart(cart);
+      render();
     }
+
+    function removeLine(id, mode) {
+      const cart = getCart().filter((x) => !(x.id === id && x.mode === mode));
+      setCart(cart);
+      render();
+    }
+
+    itemsEl.addEventListener("click", (e) => {
+      const minus = e.target.closest("[data-qtyminus]");
+      const plus = e.target.closest("[data-qtyplus]");
+      const rem = e.target.closest("[data-remove]");
+
+      if (minus) {
+        updateQty(minus.getAttribute("data-qtyminus"), minus.getAttribute("data-modekey"), -1);
+      } else if (plus) {
+        updateQty(plus.getAttribute("data-qtyplus"), plus.getAttribute("data-modekey"), +1);
+      } else if (rem) {
+        removeLine(rem.getAttribute("data-remove"), rem.getAttribute("data-modekey"));
+      }
+    });
+
+    itemsEl.addEventListener("change", (e) => {
+      const sel = e.target.closest("select[data-mode]");
+      if (!sel) return;
+      const id = sel.getAttribute("data-mode");
+      const newMode = sel.value;
+
+      const cart = getCart();
+      const lines = cartLines(cart);
+      const line = lines.find((l) => l.deal.id === id);
+      if (!line) return;
+
+      // move qty to the new mode line (merge if needed)
+      const oldMode = line.mode;
+      if (oldMode === newMode) return;
+
+      const qty = line.qty;
+
+      // remove old line
+      let next = cart.filter((x) => !(x.id === id && x.mode === oldMode));
+
+      // add/merge new line
+      const existing = next.find((x) => x.id === id && x.mode === newMode);
+      if (existing) existing.qty += qty;
+      else next.push({ id, mode: newMode, qty });
+
+      setCart(next);
+      render();
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const cart = getCart();
+      const { lines, subtotal, original, savings } = cartTotals(cart);
+      if (!lines.length) {
+        msg.textContent = "Your cart is empty.";
+        return;
+      }
+
+      const impact = computeImpactForOrder(lines.map((l) => ({ qty: l.qty, mode: l.mode })));
+
+      const order = {
+        id: "ord_" + Date.now(),
+        ts: Date.now(),
+        lines: lines.map((l) => ({ id: l.deal.id, qty: l.qty, mode: l.mode })),
+        subtotal,
+        original,
+        savings,
+        impact
+      };
+
+      const orders = readJSON(LS.orders, []);
+      orders.unshift(order);
+      writeJSON(LS.orders, orders.slice(0, 30));
+
+      const ui = getUserImpact();
+      const next = {
+        meals: ui.meals + impact.meals,
+        kgFood: ui.kgFood + impact.kgFood,
+        kgCO2e: ui.kgCO2e + impact.kgCO2e,
+        donated: ui.donated + impact.donated,
+        savings: ui.savings + savings
+      };
+      setUserImpact(next);
+
+      setCart([]);
+      renderCartCount();
+      render();
+
+      openModal({
+        title: "Order confirmed",
+        bodyHTML: `
+          <p><strong>Thanks — your order is confirmed.</strong></p>
+          <p class="muted">You rescued <strong>${impact.meals}</strong> meal(s), saved about <strong>${round1(impact.kgFood)}</strong> kg of food, and avoided about <strong>${round1(impact.kgCO2e)}</strong> kg CO₂e.</p>
+          <p class="muted">Estimated donation from this order: <strong>${money(impact.donated)}</strong>.</p>
+          <hr class="hr" />
+          <p class="tiny muted">Pickup windows are shown per item. Please arrive within the listed time.</p>
+        `,
+        footerHTML: `
+          <a class="btn btn--ghost" href="./impact-tracker.html">View Impact Tracker</a>
+          <button class="btn btn--primary" type="button" data-close="1">Done</button>
+        `
+      });
+
+      msg.textContent = "Order placed.";
+      toast("Order confirmed");
+      form.reset();
+    });
+
+    render();
+  }
+
+  function initContactPage() {
+    const form = document.getElementById("contactForm");
+    const msg = document.getElementById("contactMsg");
+    if (!form || !msg) return;
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      msg.textContent = "Message sent — we’ll reply by email.";
+      toast("Message sent");
+      form.reset();
+    });
   }
 
   function initCommon() {
@@ -860,11 +852,6 @@
 
     setActiveNav();
     initMobileMenu();
-    initFooterLinks();
-
-    const cartBtn = document.getElementById("cartBtn");
-    if (cartBtn) cartBtn.addEventListener("click", openCartModal);
-
     renderCartCount();
   }
 
@@ -874,6 +861,8 @@
     if (page === "deals") initDealsPage();
     if (page === "mission") initMissionPage();
     if (page === "impact") initImpactPage();
+    if (page === "cart") initCartPage();
+    if (page === "contact") initContactPage();
   }
 
   document.addEventListener("DOMContentLoaded", function () {
