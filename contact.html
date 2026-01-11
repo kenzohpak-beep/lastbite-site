@@ -1,169 +1,106 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LastBite — Contact</title>
-    <meta name="description" content="Contact LastBite for support or partnership inquiries." />
-    <meta name="theme-color" content="#193B1B" />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — LastBite</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="contact">
+  <header class="header">
+    <div class="container header__row">
+      <a class="brand" href="./index.html" aria-label="LastBite">
+        <img src="assets/lastbite.png" alt="LastBite logo" class="brandLogo" />
+      </a>
 
-  <body data-page="contact">
-    <a class="skip-link" href="#main">Skip to content</a>
-
-    <header class="header">
-      <div class="container header__inner">
-        <a class="brand" href="./index.html" aria-label="LastBite home">
-          <span class="brand__mark" aria-hidden="true"></span>
-          <span class="brand__text">
-            <strong>LastBite</strong>
-            <small>Save food. Save money.</small>
-          </span>
-        </a>
-
-        <nav class="nav nav--desktop" aria-label="Primary">
-          <a href="./index.html" data-route="home">Home</a>
-          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
-          <a href="./how-it-works.html" data-route="how">How It Works</a>
-          <a href="./our-mission.html" data-route="mission">Our Mission</a>
-          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
-        </nav>
-
-        <div class="header__actions">
-          <a class="btn btn--ghost" href="./cart.html" id="cartLink">
-            Cart <span class="pill" id="cartCount">0</span>
-          </a>
-          <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
-
-          <button
-            class="btn btn--ghost navToggle"
-            type="button"
-            id="navToggle"
-            aria-label="Open menu"
-            aria-expanded="false"
-            aria-controls="mobileNav"
-          >
-            ☰
-          </button>
-        </div>
-      </div>
-
-      <nav class="nav nav--mobile" id="mobileNav" aria-label="Primary mobile" hidden>
-        <div class="container nav--mobile__inner">
-          <a href="./index.html" data-route="home">Home</a>
-          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
-          <a href="./how-it-works.html" data-route="how">How It Works</a>
-          <a href="./our-mission.html" data-route="mission">Our Mission</a>
-          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
-          <a href="./cart.html">Cart</a>
-          <a href="./contact.html">Contact</a>
-        </div>
+      <nav class="nav nav--desktop" aria-label="Primary">
+        <a data-route="home" href="./index.html">Home</a>
+        <a data-route="deals" href="./browse-deals.html">Browse Deals</a>
+        <a data-route="how" href="./how-it-works.html">How It Works</a>
+        <a data-route="mission" href="./our-mission.html">Our Mission</a>
+        <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
+        <a data-route="contact" href="./contact.html">Contact</a>
       </nav>
-    </header>
 
-    <main id="main" class="main">
+      <div class="header__actions">
+        <a class="btn btn--ghost" href="./cart.html">
+          Cart <span class="cartCount" id="cartCount">0</span>
+        </a>
+        <button class="btn btn--ghost navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileNav">☰</button>
+      </div>
+    </div>
+
+    <div class="mobileNav" id="mobileNav" hidden>
+      <div class="container mobileNav__inner">
+        <a data-route="home" href="./index.html">Home</a>
+        <a data-route="deals" href="./browse-deals.html">Browse Deals</a>
+        <a data-route="how" href="./how-it-works.html">How It Works</a>
+        <a data-route="mission" href="./our-mission.html">Our Mission</a>
+        <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
+        <a data-route="contact" href="./contact.html">Contact</a>
+        <a href="./cart.html">Cart (<span id="cartCountMobile">0</span>)</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="section">
       <div class="container">
-        <section class="card hero">
-          <div class="hero__inner">
-            <div class="hero__kicker">Contact</div>
-            <h1 class="h2" style="margin-top:10px;">We’re here to help</h1>
-            <p class="muted" style="margin:0;">
-              Support, feedback, and partner inquiries.
-            </p>
-          </div>
-        </section>
+        <div class="pageHead">
+          <h1 class="h2">Contact</h1>
+          <p class="muted">Questions, partnerships, or feedback.</p>
+        </div>
 
-        <section class="section grid grid--2">
-          <div class="card"><div class="card__pad">
-            <h2 class="h2">Reach us</h2>
-            <p class="muted" style="margin:0;">
-              Email: <a href="mailto:lastbite@gmail.com"><strong>lastbite@gmail.com</strong></a><br />
-              Phone: <a href="tel:+14162472483"><strong>416-247-BITE</strong></a>
-            </p>
-
-            <div class="section" style="margin-top:14px;">
-              <div class="badge badge--lime">Partners: list surplus near closing</div>
-              <div class="badge" style="margin-top:8px;">Customers: order support</div>
+        <div class="grid grid--2">
+          <div class="card">
+            <div class="card__pad">
+              <div class="h3">Reach us</div>
+              <p class="muted" style="margin-bottom:10px;">
+                Email: <strong>lastbite@gmail.com</strong><br />
+                Phone: <strong>416-247-BITE</strong>
+              </p>
+              <div class="tiny muted">We respond by email.</div>
             </div>
-          </div></div>
-
-          <div class="card"><div class="card__pad">
-            <h2 class="h2">Send a message</h2>
-            <form id="contactForm" class="grid" style="gap:10px; margin-top:12px;">
-              <div class="field">
-                <label for="cName">Name</label>
-                <input id="cName" required placeholder="Your name" />
-              </div>
-              <div class="field">
-                <label for="cEmail">Email</label>
-                <input id="cEmail" type="email" required placeholder="you@example.com" />
-              </div>
-              <div class="field">
-                <label for="cTopic">Topic</label>
-                <select id="cTopic">
-                  <option>Support</option>
-                  <option>Partnership</option>
-                  <option>Feedback</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="cMsg">Message</label>
-                <input id="cMsg" required placeholder="How can we help?" />
-              </div>
-
-              <button class="btn btn--primary" type="submit">Send message</button>
-              <div id="contactMsg" class="tiny muted" role="status"></div>
-            </form>
-          </div></div>
-        </section>
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="container footer__grid">
-        <div>
-          <div class="footer__brand">
-            <span class="brand__mark" aria-hidden="true"></span>
-            <strong>LastBite</strong>
           </div>
-          <p class="muted">
-            End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
-          </p>
-        </div>
 
-        <div>
-          <strong>Explore</strong>
-          <div class="footer__links">
-            <a href="./browse-deals.html">Browse Deals</a>
-            <a href="./how-it-works.html">How It Works</a>
-            <a href="./our-mission.html">Our Mission</a>
-            <a href="./impact-tracker.html">Impact Tracker</a>
-            <a href="./cart.html">Cart</a>
+          <div class="card">
+            <div class="card__pad">
+              <div class="h3">Send a message</div>
+              <form id="contactForm" class="grid" style="gap:10px; margin-top:10px;">
+                <div class="field">
+                  <label for="cname">Name</label>
+                  <input id="cname" required placeholder="Your name" />
+                </div>
+                <div class="field">
+                  <label for="cemail">Email</label>
+                  <input id="cemail" type="email" required placeholder="you@example.com" />
+                </div>
+                <div class="field">
+                  <label for="cmsg">Message</label>
+                  <textarea id="cmsg" required rows="4" placeholder="How can we help?"></textarea>
+                </div>
+                <button class="btn btn--primary" type="submit">Send</button>
+                <div class="tiny muted" id="contactMsg"></div>
+              </form>
+            </div>
           </div>
         </div>
 
-        <div>
-          <strong>Contact</strong>
-          <div class="footer__links">
-            <a href="./contact.html">Contact page</a>
-            <a href="mailto:lastbite@gmail.com">lastbite@gmail.com</a>
-            <a href="tel:+14162472483">416-247-BITE</a>
-          </div>
-        </div>
       </div>
+    </section>
+  </main>
 
-      <div class="container footer__bottom">
-        <span class="tiny muted">© <span id="year"></span> LastBite</span>
-        <span class="tiny muted">lastbite@gmail.com • 416-247-BITE</span>
-      </div>
-    </footer>
+  <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <div id="modalRoot" class="modalRoot" hidden></div>
 
-    <div id="modalRoot" class="modalRoot" hidden></div>
-    <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <footer class="footer">
+    <div class="container footer__row">
+      <div class="tiny muted">© <span id="year"></span> LastBite</div>
+      <div class="tiny muted">Email: lastbite@gmail.com • Phone: 416-247-BITE</div>
+    </div>
+  </footer>
 
-    <script src="./data.js"></script>
-    <script src="./main.js"></script>
-  </body>
+  <script src="./data.js"></script>
+  <script src="./main.js"></script>
+</body>
 </html>
