@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>LastBite — Impact Tracker</title>
-    <meta name="description" content="Track your rescued meals, food saved, CO2 avoided, and estimated donations (demo)." />
+    <meta name="description" content="Track your rescued meals, food saved, CO₂ avoided, savings, and estimated donations." />
     <meta name="theme-color" content="#193B1B" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -31,9 +31,9 @@
         </nav>
 
         <div class="header__actions">
-          <button class="btn btn--ghost" type="button" id="cartBtn">
+          <a class="btn btn--ghost" href="./cart.html" id="cartLink">
             Cart <span class="pill" id="cartCount">0</span>
-          </button>
+          </a>
           <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
 
           <button
@@ -56,6 +56,8 @@
           <a href="./how-it-works.html" data-route="how">How It Works</a>
           <a href="./our-mission.html" data-route="mission">Our Mission</a>
           <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+          <a href="./cart.html">Cart</a>
+          <a href="./contact.html">Contact</a>
         </div>
       </nav>
     </header>
@@ -65,42 +67,50 @@
         <section class="card hero">
           <div class="hero__inner">
             <div class="hero__kicker">Impact Tracker</div>
-            <h1 class="h2" style="margin-top:10px;">See what you’ve rescued (demo).</h1>
-            <p class="muted" style="margin:0;">
-              Your impact updates when you complete a <strong>Checkout (demo)</strong>.
+            <h1 class="h2" style="margin-top:10px;">Your savings and impact</h1>
+            <p class="muted" style="margin:0; max-width: 78ch;">
+              We estimate food saved and CO₂ avoided based on meals rescued.
+              Estimated donation is based on 5% of LastBite profits.
             </p>
           </div>
         </section>
 
         <section class="section grid grid--2">
           <div class="card"><div class="card__pad">
-            <h2 class="h2">Your impact</h2>
+            <h2 class="h2">Your totals</h2>
             <div class="grid grid--3" style="margin-top:12px; gap:10px;" id="yourImpactRow1"></div>
             <div class="grid grid--3" style="margin-top:10px; gap:10px;" id="yourImpactRow2"></div>
 
             <div class="section" style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
               <a class="btn btn--primary" href="./browse-deals.html">Browse deals</a>
-              <button class="btn btn--ghost" type="button" id="resetImpact">Reset my demo data</button>
+              <button class="btn btn--ghost" type="button" id="resetImpact">Reset impact</button>
             </div>
 
             <p class="tiny muted" style="margin-top:12px;">
-              “Donated” is an estimate: 5% of assumed gross profit (demo unit economics).
+              Factors: <span id="factorLine"></span>
             </p>
           </div></div>
 
           <div class="card"><div class="card__pad">
-            <h2 class="h2">Community totals (demo + you)</h2>
-            <p class="muted" style="margin:0;">A baseline demo counter plus your local demo actions.</p>
-            <div class="grid grid--3" style="margin-top:12px; gap:10px;" id="communityRow1"></div>
-            <div class="grid grid--3" style="margin-top:10px; gap:10px;" id="communityRow2"></div>
+            <h2 class="h2">What counts as “impact”?</h2>
+            <ul style="margin:0; padding-left:18px;">
+              <li><strong>Meals rescued:</strong> items ordered through LastBite.</li>
+              <li><strong>Food saved:</strong> estimated weight per meal rescued.</li>
+              <li><strong>CO₂ avoided:</strong> estimated CO₂e per meal rescued.</li>
+              <li><strong>Savings:</strong> original menu value minus LastBite price.</li>
+              <li><strong>Donation:</strong> 5% of profits directed to WFP.</li>
+            </ul>
+            <div class="section" style="margin-top:12px;">
+              <a class="btn btn--ghost" href="./our-mission.html">Read our mission</a>
+            </div>
           </div></div>
         </section>
 
         <section class="section">
           <div class="section__head">
             <div>
-              <h2 class="h2">Recent checkouts</h2>
-              <p class="muted" style="margin:0;">Latest 10 demo orders.</p>
+              <h2 class="h2">Recent orders</h2>
+              <p class="muted" style="margin:0;">Your latest orders and what they saved.</p>
             </div>
           </div>
 
@@ -119,7 +129,6 @@
           <p class="muted">
             End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
           </p>
-          <p class="tiny muted">Prototype site: checkout is simulated; impact numbers are estimates.</p>
         </div>
 
         <div>
@@ -129,21 +138,23 @@
             <a href="./how-it-works.html">How It Works</a>
             <a href="./our-mission.html">Our Mission</a>
             <a href="./impact-tracker.html">Impact Tracker</a>
+            <a href="./cart.html">Cart</a>
           </div>
         </div>
 
         <div>
           <strong>Contact</strong>
           <div class="footer__links">
-            <a href="#" id="contactLink">Email</a>
-            <a href="#" id="partnerLink">Become a partner</a>
+            <a href="./contact.html">Contact page</a>
+            <a href="mailto:lastbite@gmail.com">lastbite@gmail.com</a>
+            <a href="tel:+14162472483">416-247-BITE</a>
           </div>
         </div>
       </div>
 
       <div class="container footer__bottom">
         <span class="tiny muted">© <span id="year"></span> LastBite</span>
-        <span class="tiny muted">Static site (GitHub Pages friendly)</span>
+        <span class="tiny muted">lastbite@gmail.com • 416-247-BITE</span>
       </div>
     </footer>
 
