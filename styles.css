@@ -687,3 +687,11 @@ html, body{
   object-fit: cover;
   display: block;
 }
+/* Mission intro emphasis */
+.missionLead{
+  margin: 8px 0 0;
+  font-size: 18px;
+  line-height: 1.65;
+  font-weight: 1000;
+  color: rgba(11,15,13,0.92);
+}
