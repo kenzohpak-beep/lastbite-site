@@ -4,7 +4,8 @@
   const LS = {
     cart: "lastbite_cart_v2",
     orders: "lastbite_orders_v2",
-    impact: "lastbite_user_impact_v2"
+    impact: "lastbite_user_impact_v2",
+    companyImpact: "lastbite_company_impact_v2"
   };
 
   /* ---------------------------------
@@ -61,22 +62,32 @@
   function writeJSON(key, value) {
     const serialized = JSON.stringify(value);
     safeLocalStorageSet(key, serialized);
-    // Always mirror to window.name (helps if running from file:// or storage is blocked)
+    // Mirror into window.name so it still works if storage is blocked / file://
     const store = readWindowNameStore();
     store[key] = value;
     writeWindowNameStore(store);
   }
 
+  /* ---------------------------------
+    Format helpers
+  --------------------------------- */
   function money(n) {
     try {
-      return new Intl.NumberFormat(undefined, { style: "currency", currency: "CAD" }).format(n);
+      return new Intl.NumberFormat(undefined, { style: "currency", currency: "CAD" }).format(Number(n || 0));
     } catch {
-      return "$" + (Math.round(n * 100) / 100).toFixed(2);
+      return "$" + (Math.round(Number(n || 0) * 100) / 100).toFixed(2);
     }
   }
+
   function round1(n) {
-    return Math.round(n * 10) / 10;
+    return Math.round(Number(n || 0) * 10) / 10;
   }
+
+  function fmt1(n) {
+    const x = Number(n || 0);
+    return x.toLocaleString(undefined, { maximumFractionDigits: 1 });
+  }
+
   function escapeHTML(s) {
     return String(s)
       .replaceAll("&", "&amp;")
@@ -86,6 +97,24 @@
       .replaceAll("'", "&#039;");
   }
 
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(value);
+  }
+
+  function impactFactors() {
+    return {
+      kgFoodPerMeal: D?.IMPACT?.kgFoodPerMeal ?? 0.75,
+      kgCO2ePerMeal: D?.IMPACT?.kgCO2ePerMeal ?? 1.6,
+      grossProfitDelivery: D?.IMPACT?.grossProfitDelivery ?? 5.4,
+      grossProfitPickup: D?.IMPACT?.grossProfitPickup ?? 10.4,
+      donationRate: D?.IMPACT?.donationRate ?? 0.05
+    };
+  }
+
+  /* ---------------------------------
+    UI (toast + modal)
+  --------------------------------- */
   const modalRoot = document.getElementById("modalRoot");
   const toastRoot = document.getElementById("toastRoot");
 
@@ -144,6 +173,9 @@
     if (typeof onMount === "function") onMount(modalRoot);
   }
 
+  /* ---------------------------------
+    Nav + mobile menu
+  --------------------------------- */
   function setActiveNav() {
     const page = document.body.getAttribute("data-page");
     const routeMap = {
@@ -206,16 +238,18 @@
   }
 
   /* ---------------------------------
-    Cart (stores snapshots so Cart works even if deals list changes)
+    Cart (persisted + snapshot fields)
   --------------------------------- */
   function getCart() {
     const c = readJSON(LS.cart, []);
     return Array.isArray(c) ? c : [];
   }
+
   function setCart(cart) {
     writeJSON(LS.cart, cart);
     renderCartCount();
   }
+
   function renderCartCount() {
     const el = document.getElementById("cartCount");
     if (!el) return;
@@ -224,26 +258,17 @@
     el.textContent = String(n);
   }
 
-  // Re-render cart count when coming back to a page (bfcache)
   window.addEventListener("pageshow", renderCartCount);
   window.addEventListener("storage", (e) => {
     if (e.key === LS.cart) renderCartCount();
   });
 
-  function getUserImpact() {
-    return readJSON(LS.impact, { meals: 0, kgFood: 0, kgCO2e: 0, donated: 0, savings: 0 });
-  }
-  function setUserImpact(v) {
-    writeJSON(LS.impact, v);
-  }
-
   function cartLines(cart) {
-    // If deal exists in D.DEALS use it; otherwise fall back to the snapshot stored in cart.
     return cart
       .map((it) => {
         const deal = D?.DEALS ? D.DEALS.find((x) => x.id === it.id) : null;
 
-        // Snapshot shape to mimic a deal object if D is missing / changed
+        // Use deal if found; otherwise use snapshot stored in cart line
         const snapDeal = {
           id: it.id,
           title: it.title || "Item",
@@ -261,10 +286,9 @@
           dietary: Array.isArray(it.dietary) ? it.dietary : []
         };
 
-        const pickedDeal = deal || snapDeal;
-        return { ...it, deal: pickedDeal };
+        return { ...it, deal: deal || snapDeal };
       })
-      .filter((x) => x && x.deal && x.deal.id);
+      .filter(Boolean);
   }
 
   function cartTotals(cart) {
@@ -275,27 +299,111 @@
     return { lines, subtotal, original, savings };
   }
 
+  function addToCart(dealId, mode, qty) {
+    const deal = D?.DEALS ? D.DEALS.find((x) => x.id === dealId) : null;
+    if (!deal) return;
+
+    const q = Math.max(1, Math.min(99, Number(qty) || 1));
+
+    const cart = getCart();
+    const existing = cart.find((x) => x.id === dealId && x.mode === mode);
+
+    if (existing) {
+      existing.qty = (Number(existing.qty) || 0) + q;
+      // keep snapshot updated
+      existing.title = deal.title;
+      existing.partner = deal.partner;
+      existing.category = deal.category;
+      existing.price = deal.price;
+      existing.originalValue = deal.originalValue;
+      existing.window = deal.window;
+      existing.windowEnd = deal.windowEnd;
+      existing.description = deal.description;
+      existing.emoji = deal.emoji;
+      existing.distanceKm = deal.distanceKm;
+      existing.deliveryAvailable = deal.deliveryAvailable;
+      existing.tags = deal.tags;
+      existing.dietary = deal.dietary;
+    } else {
+      cart.push({
+        id: dealId,
+        mode,
+        qty: q,
+        // snapshot for cart page reliability
+        title: deal.title,
+        partner: deal.partner,
+        category: deal.category,
+        price: deal.price,
+        originalValue: deal.originalValue,
+        window: deal.window,
+        windowEnd: deal.windowEnd,
+        description: deal.description,
+        emoji: deal.emoji,
+        distanceKm: deal.distanceKm,
+        deliveryAvailable: deal.deliveryAvailable,
+        tags: deal.tags,
+        dietary: deal.dietary
+      });
+    }
+
+    setCart(cart);
+    toast("Added: " + deal.title);
+  }
+
+  /* ---------------------------------
+    Impact (Your + Company totals)
+  --------------------------------- */
+  function getUserImpact() {
+    return readJSON(LS.impact, { meals: 0, kgFood: 0, kgCO2e: 0, donated: 0, savings: 0 });
+  }
+
+  function setUserImpact(v) {
+    writeJSON(LS.impact, v);
+  }
+
+  function getCompanyImpact() {
+    const f = impactFactors();
+
+    // Seed totals (shows real numbers immediately)
+    const seedMeals = D?.IMPACT?.seedCompanyMeals ?? 12500;
+    const seedDonated = D?.IMPACT?.seedCompanyDonated ?? 5200;
+    const seedSavings = D?.IMPACT?.seedCompanySavings ?? 78000;
+
+    const stored = readJSON(LS.companyImpact, null);
+    if (stored && typeof stored === "object") return stored;
+
+    return {
+      meals: seedMeals,
+      kgFood: seedMeals * f.kgFoodPerMeal,
+      kgCO2e: seedMeals * f.kgCO2ePerMeal,
+      donated: seedDonated,
+      savings: seedSavings
+    };
+  }
+
+  function setCompanyImpact(v) {
+    writeJSON(LS.companyImpact, v);
+  }
+
   function computeImpactForOrder(lines) {
-    // If data missing, use safe defaults (keeps checkout usable)
-    const kgFoodPerMeal = D?.IMPACT?.kgFoodPerMeal ?? 0.75;
-    const kgCO2ePerMeal = D?.IMPACT?.kgCO2ePerMeal ?? 1.6;
-    const grossProfitDelivery = D?.IMPACT?.grossProfitDelivery ?? 5.4;
-    const grossProfitPickup = D?.IMPACT?.grossProfitPickup ?? 10.4;
-    const donationRate = D?.IMPACT?.donationRate ?? 0.05;
+    const f = impactFactors();
 
     const meals = lines.reduce((s, l) => s + (Number(l.qty) || 0), 0);
-    const kgFood = meals * kgFoodPerMeal;
-    const kgCO2e = meals * kgCO2ePerMeal;
+    const kgFood = meals * f.kgFoodPerMeal;
+    const kgCO2e = meals * f.kgCO2ePerMeal;
 
     const grossProfit = lines.reduce((s, l) => {
-      const per = l.mode === "delivery" ? grossProfitDelivery : grossProfitPickup;
+      const per = l.mode === "delivery" ? f.grossProfitDelivery : f.grossProfitPickup;
       return s + per * (Number(l.qty) || 0);
     }, 0);
 
-    const donated = grossProfit * donationRate;
+    const donated = grossProfit * f.donationRate;
     return { meals, kgFood, kgCO2e, donated, grossProfit };
   }
 
+  /* ---------------------------------
+    Deals helpers
+  --------------------------------- */
   function pctOff(deal) {
     return Math.round((1 - deal.price / deal.originalValue) * 100);
   }
@@ -315,59 +423,6 @@
     if (mins <= 120) return { text: "Ends in " + mins + "m", severity: "orange" };
     const time = end.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     return { text: "Ends " + time, severity: "muted" };
-  }
-
-  function addToCart(dealId, mode, qty) {
-    const deal = D?.DEALS ? D.DEALS.find((x) => x.id === dealId) : null;
-
-    // If deal isn't available, do nothing (deals pages depend on D anyway)
-    if (!deal) return;
-
-    const q = Math.max(1, Math.min(99, Number(qty) || 1));
-
-    const cart = getCart();
-    const existing = cart.find((x) => x.id === dealId && x.mode === mode);
-
-    if (existing) {
-      existing.qty = (Number(existing.qty) || 0) + q;
-      // keep snapshot fields updated (in case price changes)
-      existing.title = deal.title;
-      existing.partner = deal.partner;
-      existing.category = deal.category;
-      existing.price = deal.price;
-      existing.originalValue = deal.originalValue;
-      existing.window = deal.window;
-      existing.windowEnd = deal.windowEnd;
-      existing.description = deal.description;
-      existing.emoji = deal.emoji;
-      existing.distanceKm = deal.distanceKm;
-      existing.deliveryAvailable = deal.deliveryAvailable;
-      existing.tags = deal.tags;
-      existing.dietary = deal.dietary;
-    } else {
-      cart.push({
-        id: dealId,
-        mode,
-        qty: q,
-        // Snapshot fields so Cart can render reliably
-        title: deal.title,
-        partner: deal.partner,
-        category: deal.category,
-        price: deal.price,
-        originalValue: deal.originalValue,
-        window: deal.window,
-        windowEnd: deal.windowEnd,
-        description: deal.description,
-        emoji: deal.emoji,
-        distanceKm: deal.distanceKm,
-        deliveryAvailable: deal.deliveryAvailable,
-        tags: deal.tags,
-        dietary: deal.dietary
-      });
-    }
-
-    setCart(cart);
-    toast("Added: " + deal.title);
   }
 
   function buildDealCard(deal) {
@@ -429,6 +484,7 @@
     if (!deal) return;
 
     const off = pctOff(deal);
+    const f = impactFactors();
 
     openModal({
       title: "Add to cart",
@@ -474,7 +530,7 @@
                 </div>
 
                 <div class="tiny muted">
-                  Estimated impact per meal: ${D?.IMPACT?.kgFoodPerMeal ?? 0.75} kg food saved • ${D?.IMPACT?.kgCO2ePerMeal ?? 1.6} kg CO₂e avoided.
+                  Estimated impact per meal: ${f.kgFoodPerMeal} kg food saved • ${f.kgCO2ePerMeal} kg CO₂e avoided.
                 </div>
               </div>
             </div>
@@ -504,6 +560,9 @@
     });
   }
 
+  /* ---------------------------------
+    Pages
+  --------------------------------- */
   function initDealsPage() {
     if (!D) return;
 
@@ -627,11 +686,12 @@
     const ui = getUserImpact();
     const row1 = document.getElementById("homeImpactRow1");
     const row2 = document.getElementById("homeImpactRow2");
+
     if (row1) {
       row1.innerHTML = `
-        <div class="badge badge--lime">🍽️ ${ui.meals.toLocaleString()} meals</div>
-        <div class="badge">🥕 ${Math.round(ui.kgFood).toLocaleString()} kg food</div>
-        <div class="badge">🌿 ${Math.round(ui.kgCO2e).toLocaleString()} kg CO₂e</div>
+        <div class="badge badge--lime">🍽️ ${Number(ui.meals || 0).toLocaleString()} meals</div>
+        <div class="badge">🥕 ${fmt1(ui.kgFood)} kg food</div>
+        <div class="badge">🌿 ${fmt1(ui.kgCO2e)} kg CO₂e</div>
       `;
     }
     if (row2) {
@@ -706,18 +766,19 @@
   }
 
   function initImpactPage() {
-    if (!D) return;
-
     const ui = getUserImpact();
+    const co = getCompanyImpact();
     const orders = readJSON(LS.orders, []);
 
+    // Your impact (rows)
     const y1 = document.getElementById("yourImpactRow1");
     const y2 = document.getElementById("yourImpactRow2");
+
     if (y1) {
       y1.innerHTML = `
-        <div class="badge badge--lime">🍽️ ${ui.meals.toLocaleString()} meals</div>
-        <div class="badge">🥕 ${Math.round(ui.kgFood).toLocaleString()} kg food</div>
-        <div class="badge">🌿 ${Math.round(ui.kgCO2e).toLocaleString()} kg CO₂e</div>
+        <div class="badge badge--lime">🍽️ ${Number(ui.meals || 0).toLocaleString()} meals</div>
+        <div class="badge">🥕 ${fmt1(ui.kgFood)} kg food</div>
+        <div class="badge">🌿 ${fmt1(ui.kgCO2e)} kg CO₂e</div>
       `;
     }
     if (y2) {
@@ -728,13 +789,57 @@
       `;
     }
 
-    const factorLine = document.getElementById("factorLine");
-    if (factorLine) {
-      factorLine.textContent = `${D.IMPACT.kgFoodPerMeal} kg food/meal • ${D.IMPACT.kgCO2ePerMeal} kg CO₂e/meal`;
+    // Optional numeric placeholders (if present)
+    setText("yourMeals", Number(ui.meals || 0).toLocaleString());
+    setText("yourFood", `${fmt1(ui.kgFood)} kg`);
+    setText("yourCO2", `${fmt1(ui.kgCO2e)} kg`);
+    setText("yourDonated", money(ui.donated));
+    setText("yourSavings", money(ui.savings));
+    setText("yourOrders", String(orders.length));
+
+    // Company impact rows (supports multiple possible IDs)
+    const c1 =
+      document.getElementById("companyImpactRow1") ||
+      document.getElementById("communityImpactRow1") ||
+      document.getElementById("platformImpactRow1");
+
+    const c2 =
+      document.getElementById("companyImpactRow2") ||
+      document.getElementById("communityImpactRow2") ||
+      document.getElementById("platformImpactRow2");
+
+    if (c1) {
+      c1.innerHTML = `
+        <div class="badge badge--lime">🍽️ ${Number(co.meals || 0).toLocaleString()} meals</div>
+        <div class="badge">🥕 ${fmt1(co.kgFood)} kg food</div>
+        <div class="badge">🌿 ${fmt1(co.kgCO2e)} kg CO₂e</div>
+      `;
+    }
+    if (c2) {
+      c2.innerHTML = `
+        <div class="badge badge--orange">🎗️ ${money(co.donated)} donated</div>
+        <div class="badge">💸 ${money(co.savings)} saved</div>
+        <div class="badge">🏷️ Partners: ${D?.PARTNERS?.length ?? 0}</div>
+      `;
     }
 
+    // Optional company numeric placeholders (if present)
+    setText("companyMeals", Number(co.meals || 0).toLocaleString());
+    setText("companyFood", `${fmt1(co.kgFood)} kg`);
+    setText("companyCO2", `${fmt1(co.kgCO2e)} kg`);
+    setText("companyDonated", money(co.donated));
+    setText("companySavings", money(co.savings));
+
+    // Factors line
+    const f = impactFactors();
+    const factorLine = document.getElementById("factorLine");
+    if (factorLine) {
+      factorLine.textContent = `${f.kgFoodPerMeal} kg food/meal • ${f.kgCO2ePerMeal} kg CO₂e/meal`;
+    }
+
+    // Recent orders
     const recent = document.getElementById("recentOrders");
-    if (recent) {
+    if (recent && D?.DEALS) {
       const rows = orders.slice(0, 10).map((o) => {
         const d = new Date(o.ts);
         const when = d.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
@@ -766,20 +871,25 @@
         `;
       }).join("");
 
-      recent.innerHTML = rows || `<div class="card"><div class="card__pad"><p class="muted">No orders yet. Add deals and place an order from your cart.</p></div></div>`;
+      recent.innerHTML =
+        rows ||
+        `<div class="card"><div class="card__pad"><p class="muted">No orders yet. Add deals and place an order from your cart.</p></div></div>`;
     }
 
+    // Reset (user + company)
     const reset = document.getElementById("resetImpact");
     if (reset) {
       reset.addEventListener("click", () => {
         try { localStorage.removeItem(LS.orders); } catch {}
         try { localStorage.removeItem(LS.impact); } catch {}
         try { localStorage.removeItem(LS.cart); } catch {}
-        // also clear window.name mirror
+        try { localStorage.removeItem(LS.companyImpact); } catch {}
+
         const store = readWindowNameStore();
         delete store[LS.orders];
         delete store[LS.impact];
         delete store[LS.cart];
+        delete store[LS.companyImpact];
         writeWindowNameStore(store);
 
         renderCartCount();
@@ -917,7 +1027,6 @@
       if (existing) {
         existing.qty = (Number(existing.qty) || 0) + qty;
       } else {
-        // carry snapshot fields forward
         const snapshot = cart.find((x) => x.id === id && x.mode === oldMode) || {};
         next.push({ ...snapshot, id, mode: newMode, qty });
       }
@@ -952,15 +1061,27 @@
       orders.unshift(order);
       writeJSON(LS.orders, orders.slice(0, 30));
 
+      // Update "Your impact"
       const ui = getUserImpact();
-      const next = {
-        meals: ui.meals + impact.meals,
-        kgFood: ui.kgFood + impact.kgFood,
-        kgCO2e: ui.kgCO2e + impact.kgCO2e,
-        donated: ui.donated + impact.donated,
-        savings: ui.savings + savings
+      const nextUser = {
+        meals: Number(ui.meals || 0) + impact.meals,
+        kgFood: Number(ui.kgFood || 0) + impact.kgFood,
+        kgCO2e: Number(ui.kgCO2e || 0) + impact.kgCO2e,
+        donated: Number(ui.donated || 0) + impact.donated,
+        savings: Number(ui.savings || 0) + savings
       };
-      setUserImpact(next);
+      setUserImpact(nextUser);
+
+      // Update "Company impact"
+      const co = getCompanyImpact();
+      const nextCompany = {
+        meals: Number(co.meals || 0) + impact.meals,
+        kgFood: Number(co.kgFood || 0) + impact.kgFood,
+        kgCO2e: Number(co.kgCO2e || 0) + impact.kgCO2e,
+        donated: Number(co.donated || 0) + impact.donated,
+        savings: Number(co.savings || 0) + savings
+      };
+      setCompanyImpact(nextCompany);
 
       setCart([]);
       render();
@@ -985,7 +1106,6 @@
       form.reset();
     });
 
-    // Re-render when navigating back to Cart page
     window.addEventListener("pageshow", render);
     window.addEventListener("storage", (e) => {
       if (e.key === LS.cart) render();
