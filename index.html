@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LastBite — Save Food. Save Money.</title>
+  <title>LastBite — Save food. Save money.</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
-<body data-page="home">
+
+<body data-page="home" class="homeBg">
   <header class="header">
     <div class="container header__row">
       <a class="brand" href="./index.html" aria-label="LastBite">
@@ -19,16 +20,14 @@
         <a data-route="how" href="./how-it-works.html">How It Works</a>
         <a data-route="mission" href="./our-mission.html">Our Mission</a>
         <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
-        <a data-route="contact" href="./contact.html">Contact</a>
+        <a href="./contact.html">Contact</a>
       </nav>
 
       <div class="header__actions">
-        <a class="btn btn--ghost" href="./cart.html" aria-label="Cart">
+        <a class="btn btn--ghost" href="./cart.html">
           Cart <span class="cartCount" id="cartCount">0</span>
         </a>
-        <button class="btn btn--ghost navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileNav">
-          ☰
-        </button>
+        <button class="btn btn--ghost navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileNav">☰</button>
       </div>
     </div>
 
@@ -39,86 +38,91 @@
         <a data-route="how" href="./how-it-works.html">How It Works</a>
         <a data-route="mission" href="./our-mission.html">Our Mission</a>
         <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
-        <a data-route="contact" href="./contact.html">Contact</a>
-        <a href="./cart.html">Cart (<span id="cartCountMobile">0</span>)</a>
+        <a href="./cart.html">Cart</a>
+        <a href="./contact.html">Contact</a>
       </div>
     </div>
   </header>
 
   <main class="main">
-    <section class="hero">
-      <div class="container hero__grid">
-        <div class="hero__copy">
-          <h1>Save food. Save money. Rescue end-of-day meals.</h1>
-          <p class="lead">
-            LastBite lets restaurants and bakeries list surplus food near closing. You get big discounts (typically 40–70% off),
-            and every purchase helps reduce food waste.
-          </p>
+    <section class="section hero">
+      <div class="container">
+        <div class="hero__grid">
+          <div class="card">
+            <div class="card__pad">
+              <div class="kicker">End-of-day surplus • Big discounts</div>
+              <h1>Good food, rescued daily.</h1>
+              <p class="lead">
+                LastBite helps restaurants and shops sell surplus food near closing. You get quality meals at typically 40–70% off,
+                while reducing waste and supporting local partners.
+              </p>
 
-          <div class="hero__cta">
-            <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
-            <a class="btn btn--ghost" href="./how-it-works.html">How it works</a>
-          </div>
+              <div class="hero__cta">
+                <a class="btn btn--primary" href="./browse-deals.html">Browse deals</a>
+                <a class="btn btn--ghost" href="./how-it-works.html">How it works</a>
+                <a class="btn btn--ghost" href="./impact-tracker.html">View impact</a>
+              </div>
 
-          <div class="badgeRow" id="homeHighlights"></div>
-        </div>
-
-        <div class="hero__card card">
-          <div class="card__pad">
-            <div class="tiny muted">Tonight’s snapshot</div>
-            <h2 class="h3">Your impact so far</h2>
-            <div class="badgeRow" id="homeImpactRow1"></div>
-            <div class="badgeRow" id="homeImpactRow2" style="margin-top:10px;"></div>
-            <hr class="hr" />
-            <div class="tiny muted">
-              Impact estimates are based on meals rescued (food + CO₂e per meal).
+              <div class="badgeRow badgeRow--wrap" id="homeHighlights"></div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="container grid grid--3">
-        <div class="card">
-          <div class="card__pad">
-            <div class="h3">Big discounts</div>
-            <p class="muted">
-              Surplus-only deals, priced to move near closing—great for students, families, and anyone watching their budget.
-            </p>
+          <div class="card">
+            <div class="card__pad">
+              <div class="h3">Your impact</div>
+              <p class="muted">Tracked from your purchases on this device.</p>
+              <div class="badgeRow badgeRow--wrap" id="homeImpactRow1" style="margin-top:10px;"></div>
+              <div class="badgeRow badgeRow--wrap" id="homeImpactRow2" style="margin-top:10px;"></div>
+
+              <hr class="hr" />
+
+              <div class="h3">Get deal alerts</div>
+              <p class="muted">New surplus drops happen near closing.</p>
+
+              <form id="updatesForm" class="grid" style="gap:10px; margin-top:10px;">
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input id="email" type="email" placeholder="you@example.com" required />
+                </div>
+                <button class="btn btn--primary" type="submit">Subscribe</button>
+                <div class="tiny muted" id="updatesMsg"></div>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="card">
-          <div class="card__pad">
-            <div class="h3">Easy pickup or delivery</div>
-            <p class="muted">
-              Choose pickup or delivery (where available). Orders are clustered at off-peak hours to keep fees low.
-            </p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card__pad">
-            <div class="h3">Mission-driven</div>
-            <p class="muted">
-              We donate 5% of profits to the UN World Food Programme (WFP) and show the impact you helped create.
-            </p>
-          </div>
+
         </div>
       </div>
     </section>
 
     <section class="section section--soft">
       <div class="container">
-        <div class="grid heroSplit">
-          <div>
-            <h2 class="h3">Get updates for new deals</h2>
-            <p class="muted">Weekly highlights from our partner restaurants and bakeries.</p>
+        <div class="grid grid--3">
+          <div class="card">
+            <div class="card__pad">
+              <div class="stepNum">1</div>
+              <div class="h3">Browse surplus</div>
+              <p class="muted">Deals appear near closing from nearby partners.</p>
+            </div>
           </div>
-          <form class="updates" id="updatesForm">
-            <input id="email" type="email" placeholder="Email address" required />
-            <button class="btn btn--primary" type="submit">Subscribe</button>
-            <div class="tiny muted" id="updatesMsg" style="grid-column:1 / -1;"></div>
-          </form>
+          <div class="card">
+            <div class="card__pad">
+              <div class="stepNum">2</div>
+              <div class="h3">Reserve in seconds</div>
+              <p class="muted">Choose pickup or delivery (where available).</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__pad">
+              <div class="stepNum">3</div>
+              <div class="h3">Track impact</div>
+              <p class="muted">See food saved, CO₂e avoided, and estimated donation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="notice notice--accent" style="margin-top:14px;">
+          <strong>5% of profits donated</strong>
+          <span class="muted"> to the UN World Food Programme (WFP).</span>
         </div>
       </div>
     </section>
