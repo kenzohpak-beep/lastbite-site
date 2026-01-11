@@ -1,182 +1,115 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LastBite — Our Mission</title>
-    <meta name="description" content="LastBite’s mission: reduce food waste, create affordable meals, and donate 5% of profits to WFP." />
-    <meta name="theme-color" content="#193B1B" />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Mission — LastBite</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="mission">
+  <header class="header">
+    <div class="container header__row">
+      <a class="brand" href="./index.html" aria-label="LastBite">
+        <img src="assets/lastbite.png" alt="LastBite logo" class="brandLogo" />
+      </a>
 
-  <body data-page="mission">
-    <a class="skip-link" href="#main">Skip to content</a>
-
-    <header class="header">
-      <div class="container header__inner">
-        <a class="brand" href="./index.html" aria-label="LastBite home">
-          <span class="brand__mark" aria-hidden="true"></span>
-          <span class="brand__text">
-            <strong>LastBite</strong>
-            <small>Save food. Save money.</small>
-          </span>
-        </a>
-
-        <nav class="nav nav--desktop" aria-label="Primary">
-          <a href="./index.html" data-route="home">Home</a>
-          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
-          <a href="./how-it-works.html" data-route="how">How It Works</a>
-          <a href="./our-mission.html" data-route="mission">Our Mission</a>
-          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
-        </nav>
-
-        <div class="header__actions">
-          <a class="btn btn--ghost" href="./cart.html" id="cartLink">
-            Cart <span class="pill" id="cartCount">0</span>
-          </a>
-          <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
-
-          <button
-            class="btn btn--ghost navToggle"
-            type="button"
-            id="navToggle"
-            aria-label="Open menu"
-            aria-expanded="false"
-            aria-controls="mobileNav"
-          >
-            ☰
-          </button>
-        </div>
-      </div>
-
-      <nav class="nav nav--mobile" id="mobileNav" aria-label="Primary mobile" hidden>
-        <div class="container nav--mobile__inner">
-          <a href="./index.html" data-route="home">Home</a>
-          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
-          <a href="./how-it-works.html" data-route="how">How It Works</a>
-          <a href="./our-mission.html" data-route="mission">Our Mission</a>
-          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
-          <a href="./cart.html">Cart</a>
-          <a href="./contact.html">Contact</a>
-        </div>
+      <nav class="nav nav--desktop" aria-label="Primary">
+        <a data-route="home" href="./index.html">Home</a>
+        <a data-route="deals" href="./browse-deals.html">Browse Deals</a>
+        <a data-route="how" href="./how-it-works.html">How It Works</a>
+        <a data-route="mission" href="./our-mission.html">Our Mission</a>
+        <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
+        <a data-route="contact" href="./contact.html">Contact</a>
       </nav>
-    </header>
 
-    <main id="main" class="main">
-      <div class="container">
-        <section class="card hero">
-          <div class="hero__inner">
-            <div class="hero__kicker">Our Mission</div>
-            <h1 class="h2" style="margin-top:10px;">Reduce food waste by making surplus affordable and convenient</h1>
-            <p class="muted" style="margin:0; max-width: 74ch;">
-              Perfectly good food is thrown away every day at closing time. LastBite helps local businesses sell surplus at
-              deep discounts, so customers get affordable meals and communities generate less waste.
-            </p>
-
-            <div class="hero__stats">
-              <span class="statPill">🎯 Surplus-only <b>focus</b></span>
-              <span class="statPill">💸 Guaranteed <b>discounts</b></span>
-              <span class="statPill">🎗️ 5% profits <b>to WFP</b></span>
-            </div>
-          </div>
-        </section>
-
-        <section class="section grid grid--2">
-          <div class="card"><div class="card__pad">
-            <h2 class="h2">How we create impact</h2>
-            <ul style="margin:0; padding-left:18px;">
-              <li><strong>Rescue surplus:</strong> unsold food is redirected to customers instead of the bin.</li>
-              <li><strong>Make food affordable:</strong> students, families, and workers get real meals at lower cost.</li>
-              <li><strong>Support local businesses:</strong> partners earn incremental revenue and gain sustainability visibility.</li>
-              <li><strong>Reduce emissions:</strong> less wasted food means fewer embedded emissions are wasted.</li>
-              <li><strong>Give back:</strong> 5% of LastBite profits are donated to the UN World Food Programme (WFP).</li>
-            </ul>
-
-            <div class="section" style="margin-top:12px;">
-              <a class="btn btn--ghost" href="./impact-tracker.html">See the Impact Tracker</a>
-            </div>
-          </div></div>
-
-          <div class="card"><div class="card__pad">
-            <h2 class="h2">What makes LastBite different</h2>
-            <ul style="margin:0; padding-left:18px;">
-              <li><strong>Not a full-menu delivery app:</strong> only end-of-day surplus listings.</li>
-              <li><strong>Off-peak operations:</strong> closing-time clustering helps reduce operational cost.</li>
-              <li><strong>Transparent value:</strong> each listing shows discount versus original value.</li>
-              <li><strong>Built-in tracking:</strong> savings and impact update after you order.</li>
-            </ul>
-
-            <div class="section" style="margin-top:12px;">
-              <button class="btn btn--primary" type="button" id="partnerCta">Become a partner</button>
-            </div>
-          </div></div>
-        </section>
-
-        <section class="section">
-          <div class="card">
-            <div class="card__pad">
-              <div class="section__head" style="margin-bottom:0;">
-                <div>
-                  <h2 class="h2">Partner categories</h2>
-                  <p class="muted" style="margin:0;">Bakeries, cafés, and shops are ideal for surplus deals near closing.</p>
-                </div>
-              </div>
-
-              <div class="grid grid--4" style="margin-top:12px;" id="partnerBadges"></div>
-
-              <div class="section" style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
-                <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
-                <a class="btn btn--ghost" href="./contact.html">Contact us</a>
-              </div>
-            </div>
-          </div>
-        </section>
+      <div class="header__actions">
+        <a class="btn btn--ghost" href="./cart.html">
+          Cart <span class="cartCount" id="cartCount">0</span>
+        </a>
+        <button class="btn btn--ghost navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileNav">☰</button>
       </div>
-    </main>
+    </div>
 
-    <footer class="footer">
-      <div class="container footer__grid">
-        <div>
-          <div class="footer__brand">
-            <span class="brand__mark" aria-hidden="true"></span>
-            <strong>LastBite</strong>
-          </div>
+    <div class="mobileNav" id="mobileNav" hidden>
+      <div class="container mobileNav__inner">
+        <a data-route="home" href="./index.html">Home</a>
+        <a data-route="deals" href="./browse-deals.html">Browse Deals</a>
+        <a data-route="how" href="./how-it-works.html">How It Works</a>
+        <a data-route="mission" href="./our-mission.html">Our Mission</a>
+        <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
+        <a data-route="contact" href="./contact.html">Contact</a>
+        <a href="./cart.html">Cart (<span id="cartCountMobile">0</span>)</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="section">
+      <div class="container">
+        <div class="pageHead">
+          <h1 class="h2">Our mission</h1>
           <p class="muted">
-            End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
+            We reduce food waste by turning unsold but perfectly good food into affordable meals—creating extra income for local
+            businesses and supporting environmental impact.
           </p>
         </div>
 
-        <div>
-          <strong>Explore</strong>
-          <div class="footer__links">
-            <a href="./browse-deals.html">Browse Deals</a>
-            <a href="./how-it-works.html">How It Works</a>
-            <a href="./our-mission.html">Our Mission</a>
-            <a href="./impact-tracker.html">Impact Tracker</a>
-            <a href="./cart.html">Cart</a>
+        <div class="grid grid--2">
+          <div class="card">
+            <div class="card__pad">
+              <div class="h3">What we do</div>
+              <ul class="muted list">
+                <li><strong>Surplus-only:</strong> end-of-day items near closing—no full-price menu browsing.</li>
+                <li><strong>Guaranteed value:</strong> typically 40–70% off the original value.</li>
+                <li><strong>Off-peak operations:</strong> clustered near closing, keeping fees lower and operations smoother.</li>
+                <li><strong>Impact tracking:</strong> we show your estimated food and CO₂e saved per order.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__pad">
+              <div class="h3">How we give back</div>
+              <p class="muted">
+                LastBite donates <strong>5% of profits</strong> to the UN World Food Programme (WFP). Every order helps rescue
+                food and supports a mission to fight hunger.
+              </p>
+              <div class="badgeRow" style="margin-top:10px;">
+                <div class="badge badge--orange">🎗️ 5% profits donated</div>
+                <div class="badge badge--lime">🌿 Waste reduction</div>
+                <div class="badge">🏪 Local business support</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div>
-          <strong>Contact</strong>
-          <div class="footer__links">
-            <a href="./contact.html">Contact page</a>
-            <a href="mailto:lastbite@gmail.com">lastbite@gmail.com</a>
-            <a href="tel:+14162472483">416-247-BITE</a>
+        <div class="card" style="margin-top:16px;">
+          <div class="card__pad">
+            <div class="h3">Partners</div>
+            <p class="muted">We work with restaurants, cafés, and bakeries to rescue surplus items near closing.</p>
+            <div class="badgeRow badgeRow--wrap" id="partnerBadges"></div>
+            <div style="margin-top:12px;">
+              <button class="btn btn--primary" id="partnerCta" type="button">Become a partner</button>
+              <a class="btn btn--ghost" href="./contact.html">Contact us</a>
+            </div>
           </div>
         </div>
+
       </div>
+    </section>
+  </main>
 
-      <div class="container footer__bottom">
-        <span class="tiny muted">© <span id="year"></span> LastBite</span>
-        <span class="tiny muted">lastbite@gmail.com • 416-247-BITE</span>
-      </div>
-    </footer>
+  <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <div id="modalRoot" class="modalRoot" hidden></div>
 
-    <div id="modalRoot" class="modalRoot" hidden></div>
-    <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <footer class="footer">
+    <div class="container footer__row">
+      <div class="tiny muted">© <span id="year"></span> LastBite</div>
+      <div class="tiny muted">Email: lastbite@gmail.com • Phone: 416-247-BITE</div>
+    </div>
+  </footer>
 
-    <script src="./data.js"></script>
-    <script src="./main.js"></script>
-  </body>
+  <script src="./data.js"></script>
+  <script src="./main.js"></script>
+</body>
 </html>
