@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LastBite — End-of-day surplus deals</title>
+    <meta
+      name="description"
+      content="LastBite is an end-of-day surplus food platform: 40–70% off pickup or delivery, reducing food waste and donating 5% of profits to WFP."
+    />
+
+    <!-- Social preview -->
+    <meta property="og:title" content="LastBite — Save food. Save money." />
+    <meta
+      property="og:description"
+      content="End-of-day surplus deals at 40–70% off. Pickup or delivery, and 5% of profits donated to WFP."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#193B1B" />
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#app">Skip to content</a>
+
+    <header class="header" id="top">
+      <div class="container header__inner">
+        <a class="brand" href="#/home" aria-label="LastBite home">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__text">
+            <strong>LastBite</strong>
+            <small>Save food. Save money.</small>
+          </span>
+        </a>
+
+        <nav class="nav nav--desktop" aria-label="Primary">
+          <a href="#/home" data-route="home">Home</a>
+          <a href="#/deals" data-route="deals">Browse Deals</a>
+          <a href="#/how" data-route="how">How It Works</a>
+          <a href="#/mission" data-route="mission">Our Mission</a>
+          <a href="#/impact" data-route="impact">Impact Tracker</a>
+        </nav>
+
+        <div class="header__actions">
+          <button class="btn btn--ghost" type="button" id="cartBtn">
+            Cart <span class="pill" id="cartCount">0</span>
+          </button>
+          <a class="btn btn--primary" href="#/deals">Browse Deals</a>
+
+          <button
+            class="btn btn--ghost navToggle"
+            type="button"
+            id="navToggle"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobileNav"
+          >
+            ☰
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav nav--mobile" id="mobileNav" aria-label="Primary mobile" hidden>
+        <div class="container nav--mobile__inner">
+          <a href="#/home" data-route="home">Home</a>
+          <a href="#/deals" data-route="deals">Browse Deals</a>
+          <a href="#/how" data-route="how">How It Works</a>
+          <a href="#/mission" data-route="mission">Our Mission</a>
+          <a href="#/impact" data-route="impact">Impact Tracker</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="app" class="main" role="main"></main>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div>
+          <div class="footer__brand">
+            <span class="brand__mark" aria-hidden="true"></span>
+            <strong>LastBite</strong>
+          </div>
+          <p class="muted">
+            End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits
+            donated to the UN World Food Programme (WFP).
+          </p>
+          <p class="tiny muted">Prototype site: checkout is simulated; impact numbers are estimates.</p>
+        </div>
+
+        <div>
+          <strong>Explore</strong>
+          <div class="footer__links">
+            <a href="#/deals">Browse Deals</a>
+            <a href="#/how">How It Works</a>
+            <a href="#/mission">Our Mission</a>
+            <a href="#/impact">Impact Tracker</a>
+          </div>
+        </div>
+
+        <div>
+          <strong>Contact</strong>
+          <div class="footer__links">
+            <a href="#" id="contactLink">Email</a>
+            <a href="#" id="partnerLink">Become a partner</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container footer__bottom">
+        <span class="tiny muted">© <span id="year"></span> LastBite</span>
+        <span class="tiny muted">GitHub Pages friendly (static)</span>
+      </div>
+    </footer>
+
+    <div id="modalRoot" class="modalRoot" hidden></div>
+    <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
