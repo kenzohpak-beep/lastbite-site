@@ -1,17 +1,13 @@
-/* LastBite static site (FoodHero-inspired: forest green + lime + warm orange)
-   No external dependencies. */
-
-/* ---------- Theme ---------- */
 :root{
   --bg: #F7F8F6;
   --surface: #FFFFFF;
   --text: #0B0F0D;
   --muted: #43534B;
 
-  --primary: #193B1B;        /* forest */
-  --primary-2: #245F39;      /* secondary green */
-  --lime: #9EFA7E;           /* highlight */
-  --orange: #CE6C2A;         /* discount accent */
+  --primary: #193B1B;
+  --primary-2: #245F39;
+  --lime: #9EFA7E;
+  --orange: #CE6C2A;
 
   --border: #E3E8E1;
   --shadow: 0 10px 30px rgba(12, 40, 20, 0.08);
@@ -23,14 +19,13 @@
   --container: 1120px;
 }
 
-/* ---------- Base ---------- */
 *{ box-sizing: border-box; }
 html, body{ height: 100%; }
 body{
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   line-height: 1.35;
 }
 
@@ -44,7 +39,6 @@ small{ color: var(--muted); }
   margin: 0 auto;
 }
 
-/* Skip link */
 .skip-link{
   position: absolute;
   left: -9999px;
@@ -58,13 +52,11 @@ small{ color: var(--muted); }
 }
 .skip-link:focus{ left: 10px; }
 
-/* Focus styles */
 :focus-visible{
   outline: 3px solid rgba(158, 250, 126, 0.75);
   outline-offset: 3px;
 }
 
-/* ---------- Header ---------- */
 .header{
   position: sticky;
   top: 0;
@@ -131,12 +123,12 @@ small{ color: var(--muted); }
   gap: 10px;
 }
 
-/* Mobile nav */
 .navToggle{ display: none; }
 .nav--mobile{
   border-top: 1px solid var(--border);
   background: rgba(247, 248, 246, 0.95);
 }
+.nav--mobile[hidden]{ display:none !important; }
 .nav--mobile__inner{
   display: grid;
   gap: 8px;
@@ -147,7 +139,6 @@ small{ color: var(--muted); }
   border-radius: 14px;
 }
 
-/* ---------- Buttons / pills ---------- */
 .btn{
   appearance: none;
   border: 1px solid transparent;
@@ -166,7 +157,6 @@ small{ color: var(--muted); }
   box-shadow: 0 10px 18px rgba(25, 59, 27, 0.14);
 }
 .btn--primary:hover{ filter: brightness(1.03); }
-
 .btn--ghost{
   background: transparent;
   border-color: var(--border);
@@ -190,7 +180,6 @@ small{ color: var(--muted); }
 
 .main{ padding: 24px 0 40px; }
 
-/* ---------- Cards / text helpers ---------- */
 .card{
   background: var(--surface);
   border: 1px solid var(--border);
@@ -224,7 +213,6 @@ small{ color: var(--muted); }
   margin-bottom: 12px;
 }
 
-/* ---------- Hero ---------- */
 .hero{
   position: relative;
   overflow: hidden;
@@ -252,7 +240,6 @@ small{ color: var(--muted); }
   font-weight: 1000;
   font-size: 12px;
 }
-
 .hero__cta{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 14px; }
 .hero__stats{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 16px; }
 .statPill{
@@ -277,7 +264,6 @@ small{ color: var(--muted); }
   .grid--4{ grid-template-columns: repeat(4, 1fr); }
 }
 
-/* ---------- Deal browsing ---------- */
 .toolbar{
   background: var(--surface);
   border: 1px solid var(--border);
@@ -346,9 +332,7 @@ small{ color: var(--muted); }
   .dealsGrid{ grid-template-columns: repeat(3, 1fr); }
 }
 
-.dealCard{
-  overflow:hidden;
-}
+.dealCard{ overflow:hidden; }
 .dealCard__top{
   padding: 14px 14px 10px;
   display:flex;
@@ -405,11 +389,9 @@ small{ color: var(--muted); }
 .priceRow{ margin-top: 12px; display:flex; align-items: baseline; gap: 10px; flex-wrap:wrap; }
 .priceNow{ font-weight: 1200; font-size: 20px; color: var(--primary); }
 .priceWas{ color: rgba(11,15,13,0.55); text-decoration: line-through; font-weight: 1000; }
-
 .dealActions{ margin-top: 12px; display:flex; justify-content: space-between; align-items:center; gap: 10px; }
 .btn--block{ width: 100%; justify-content: center; }
 
-/* ---------- Modal / toast ---------- */
 .modalRoot{
   position: fixed;
   inset: 0;
@@ -420,6 +402,8 @@ small{ color: var(--muted); }
   padding: 18px;
   z-index: 80;
 }
+.modalRoot[hidden]{ display:none !important; }
+
 .modal{
   width: min(760px, 100%);
   max-height: min(80vh, 860px);
@@ -464,7 +448,6 @@ small{ color: var(--muted); }
   font-weight: 1000;
 }
 
-/* ---------- Footer ---------- */
 .footer{
   border-top: 1px solid var(--border);
   background: #F0F3EF;
@@ -489,9 +472,7 @@ small{ color: var(--muted); }
   border-top: 1px solid rgba(0,0,0,0.06);
 }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 900px){
   .nav--desktop{ display: none; }
   .navToggle{ display: inline-flex; }
 }
-
