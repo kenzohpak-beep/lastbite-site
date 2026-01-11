@@ -389,24 +389,28 @@ small{ color: var(--muted); }
 .priceRow{ margin-top: 12px; display:flex; align-items: baseline; gap: 10px; flex-wrap:wrap; }
 .priceNow{ font-weight: 1200; font-size: 20px; color: var(--primary); }
 .priceWas{ color: rgba(11,15,13,0.55); text-decoration: line-through; font-weight: 1000; }
-.dealActions{ margin-top: 12px; display:flex; justify-content: space-between; align-items:center; gap: 10px; }
+
+.dealActions{
+  margin-top: 12px;
+  display:flex;
+  gap: 10px;
+  flex-wrap:wrap;
+}
 .btn--block{ width: 100%; justify-content: center; }
 
-/* ---------- MODAL OVERLAY (FIX) ----------
-   Dim + unclickable happens when overlay is accidentally ON.
-   This keeps it OFF unless JS adds .isOpen. */
+/* MODAL OVERLAY (safe default OFF) */
 .modalRoot{
   position: fixed;
   inset: 0;
   background: rgba(11,15,13,0.55);
-  display: none;              /* default OFF */
+  display: none;
   align-items:center;
   justify-content:center;
   padding: 18px;
   z-index: 80;
 }
 .modalRoot.isOpen{ display: flex; }
-.modalRoot[hidden]{ display:none !important; } /* extra safety */
+.modalRoot[hidden]{ display:none !important; }
 
 .modal{
   width: min(760px, 100%);
