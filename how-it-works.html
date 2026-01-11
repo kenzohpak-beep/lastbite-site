@@ -1,186 +1,120 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LastBite — How It Works</title>
-    <meta name="description" content="How LastBite works: partners list surplus near closing, customers reserve, pickup or delivery, and impact is tracked." />
-    <meta name="theme-color" content="#193B1B" />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How It Works — LastBite</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="how">
+  <header class="header">
+    <div class="container header__row">
+      <a class="brand" href="./index.html" aria-label="LastBite">
+        <img src="assets/lastbite.png" alt="LastBite logo" class="brandLogo" />
+      </a>
 
-  <body data-page="how">
-    <a class="skip-link" href="#main">Skip to content</a>
-
-    <header class="header">
-      <div class="container header__inner">
-        <a class="brand" href="./index.html" aria-label="LastBite home">
-          <span class="brand__mark" aria-hidden="true"></span>
-          <span class="brand__text">
-            <strong>LastBite</strong>
-            <small>Save food. Save money.</small>
-          </span>
-        </a>
-
-        <nav class="nav nav--desktop" aria-label="Primary">
-          <a href="./index.html" data-route="home">Home</a>
-          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
-          <a href="./how-it-works.html" data-route="how">How It Works</a>
-          <a href="./our-mission.html" data-route="mission">Our Mission</a>
-          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
-        </nav>
-
-        <div class="header__actions">
-          <a class="btn btn--ghost" href="./cart.html" id="cartLink">
-            Cart <span class="pill" id="cartCount">0</span>
-          </a>
-          <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
-
-          <button
-            class="btn btn--ghost navToggle"
-            type="button"
-            id="navToggle"
-            aria-label="Open menu"
-            aria-expanded="false"
-            aria-controls="mobileNav"
-          >
-            ☰
-          </button>
-        </div>
-      </div>
-
-      <nav class="nav nav--mobile" id="mobileNav" aria-label="Primary mobile" hidden>
-        <div class="container nav--mobile__inner">
-          <a href="./index.html" data-route="home">Home</a>
-          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
-          <a href="./how-it-works.html" data-route="how">How It Works</a>
-          <a href="./our-mission.html" data-route="mission">Our Mission</a>
-          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
-          <a href="./cart.html">Cart</a>
-          <a href="./contact.html">Contact</a>
-        </div>
+      <nav class="nav nav--desktop" aria-label="Primary">
+        <a data-route="home" href="./index.html">Home</a>
+        <a data-route="deals" href="./browse-deals.html">Browse Deals</a>
+        <a data-route="how" href="./how-it-works.html">How It Works</a>
+        <a data-route="mission" href="./our-mission.html">Our Mission</a>
+        <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
+        <a data-route="contact" href="./contact.html">Contact</a>
       </nav>
-    </header>
 
-    <main id="main" class="main">
+      <div class="header__actions">
+        <a class="btn btn--ghost" href="./cart.html">
+          Cart <span class="cartCount" id="cartCount">0</span>
+        </a>
+        <button class="btn btn--ghost navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileNav">☰</button>
+      </div>
+    </div>
+
+    <div class="mobileNav" id="mobileNav" hidden>
+      <div class="container mobileNav__inner">
+        <a data-route="home" href="./index.html">Home</a>
+        <a data-route="deals" href="./browse-deals.html">Browse Deals</a>
+        <a data-route="how" href="./how-it-works.html">How It Works</a>
+        <a data-route="mission" href="./our-mission.html">Our Mission</a>
+        <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
+        <a data-route="contact" href="./contact.html">Contact</a>
+        <a href="./cart.html">Cart (<span id="cartCountMobile">0</span>)</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="section">
       <div class="container">
-        <section class="card hero">
-          <div class="hero__inner">
-            <div class="hero__kicker">How It Works</div>
-            <h1 class="h2" style="margin-top:10px;">A surplus-only flow built for closing time</h1>
-            <p class="muted" style="margin:0; max-width: 72ch;">
-              LastBite is focused on end-of-day surplus, not full-price menus. That means deeper discounts, less waste,
-              and a smoother operational flow for partners at closing.
-            </p>
+        <div class="pageHead">
+          <h1 class="h2">How LastBite works</h1>
+          <p class="muted">A simple way to rescue good food that would otherwise be wasted.</p>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="card">
+            <div class="card__pad">
+              <div class="stepNum">1</div>
+              <div class="h3">Browse surplus deals</div>
+              <p class="muted">
+                Partners list end-of-day surplus near closing. Deals are clearly priced with the original value shown.
+              </p>
+            </div>
           </div>
-        </section>
 
-        <section class="section grid grid--3">
-          <div class="card"><div class="card__pad">
-            <div class="h3">1) Partners list surplus</div>
-            <p class="muted" style="margin:0;">
-              Near closing, partners list surplus items that are still great to eat — at <strong>40–70% off</strong>.
-            </p>
-          </div></div>
+          <div class="card">
+            <div class="card__pad">
+              <div class="stepNum">2</div>
+              <div class="h3">Choose pickup or delivery</div>
+              <p class="muted">
+                Add items to your cart and select pickup or delivery (where available). Pickup windows are shown per item.
+              </p>
+            </div>
+          </div>
 
-          <div class="card"><div class="card__pad">
-            <div class="h3">2) You reserve a pickup window</div>
-            <p class="muted" style="margin:0;">
-              Browse deals by partner and category, add to cart, and select pickup (or delivery when available).
-            </p>
-          </div></div>
+          <div class="card">
+            <div class="card__pad">
+              <div class="stepNum">3</div>
+              <div class="h3">Rescue food & track impact</div>
+              <p class="muted">
+                Every order contributes to food-waste reduction. Your Impact Tracker shows meals rescued, food saved, and CO₂e avoided.
+              </p>
+            </div>
+          </div>
+        </div>
 
-          <div class="card"><div class="card__pad">
-            <div class="h3">3) Track savings + impact</div>
-            <p class="muted" style="margin:0;">
-              After you order, LastBite tracks your estimated <strong>food saved</strong>, <strong>CO₂ avoided</strong>,
-              and your <strong>savings</strong>.
-            </p>
-          </div></div>
-        </section>
-
-        <section class="section grid grid--2">
-          <div class="card"><div class="card__pad">
-            <h2 class="h2">Why closing-time only?</h2>
-            <ul style="margin:0; padding-left:18px;">
-              <li><strong>Better discounts:</strong> surplus is priced to move before closing.</li>
-              <li><strong>Lower costs:</strong> deliveries can be batched near end-of-day.</li>
-              <li><strong>Less waste:</strong> surplus gets eaten instead of thrown out.</li>
-              <li><strong>Extra revenue for partners:</strong> turning waste into income.</li>
+        <div class="card" style="margin-top:16px;">
+          <div class="card__pad">
+            <div class="h3">Pricing</div>
+            <ul class="muted list">
+              <li><strong>Discounts:</strong> typically 40–70% off original value.</li>
+              <li><strong>Pickup:</strong> lower cost; no driver fee.</li>
+              <li><strong>Delivery:</strong> available on select deals; priced to stay affordable during off-peak.</li>
+              <li><strong>Donations:</strong> 5% of profits support the UN World Food Programme (WFP).</li>
             </ul>
 
-            <div class="section" style="margin-top:12px;">
+            <div style="margin-top:12px;">
               <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
+              <a class="btn btn--ghost" href="./impact-tracker.html">Impact Tracker</a>
             </div>
-          </div></div>
-
-          <div class="card"><div class="card__pad">
-            <h2 class="h2">Common questions</h2>
-
-            <details>
-              <summary><strong>What kind of items are listed?</strong></summary>
-              <p class="muted">Typically baked goods, desserts, bagels, and late-night slices—whatever is left at closing.</p>
-            </details>
-
-            <details>
-              <summary><strong>Do I know exactly what I’m getting?</strong></summary>
-              <p class="muted">Some deals are “surprise bags” and others are specific items. Each deal listing shows what to expect.</p>
-            </details>
-
-            <details>
-              <summary><strong>How do you calculate impact?</strong></summary>
-              <p class="muted">
-                We estimate impact per meal rescued using standard factors (food weight and CO₂e). You can see these factors in the Impact Tracker.
-              </p>
-            </details>
-          </div></div>
-        </section>
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="container footer__grid">
-        <div>
-          <div class="footer__brand">
-            <span class="brand__mark" aria-hidden="true"></span>
-            <strong>LastBite</strong>
-          </div>
-          <p class="muted">
-            End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
-          </p>
-        </div>
-
-        <div>
-          <strong>Explore</strong>
-          <div class="footer__links">
-            <a href="./browse-deals.html">Browse Deals</a>
-            <a href="./how-it-works.html">How It Works</a>
-            <a href="./our-mission.html">Our Mission</a>
-            <a href="./impact-tracker.html">Impact Tracker</a>
-            <a href="./cart.html">Cart</a>
           </div>
         </div>
 
-        <div>
-          <strong>Contact</strong>
-          <div class="footer__links">
-            <a href="./contact.html">Contact page</a>
-            <a href="mailto:lastbite@gmail.com">lastbite@gmail.com</a>
-            <a href="tel:+14162472483">416-247-BITE</a>
-          </div>
-        </div>
       </div>
+    </section>
+  </main>
 
-      <div class="container footer__bottom">
-        <span class="tiny muted">© <span id="year"></span> LastBite</span>
-        <span class="tiny muted">lastbite@gmail.com • 416-247-BITE</span>
-      </div>
-    </footer>
+  <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <div id="modalRoot" class="modalRoot" hidden></div>
 
-    <div id="modalRoot" class="modalRoot" hidden></div>
-    <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <footer class="footer">
+    <div class="container footer__row">
+      <div class="tiny muted">© <span id="year"></span> LastBite</div>
+      <div class="tiny muted">Email: lastbite@gmail.com • Phone: 416-247-BITE</div>
+    </div>
+  </footer>
 
-    <script src="./data.js"></script>
-    <script src="./main.js"></script>
-  </body>
+  <script src="./data.js"></script>
+  <script src="./main.js"></script>
+</body>
 </html>
