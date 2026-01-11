@@ -1,1 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LastBite — Cart</title>
+    <meta name="description" content="Review your LastBite cart and place your order." />
+    <meta name="theme-color" content="#193B1B" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
 
+  <body data-page="cart">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="header">
+      <div class="container header__inner">
+        <a class="brand" href="./index.html" aria-label="LastBite home">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__text">
+            <strong>LastBite</strong>
+            <small>Save food. Save money.</small>
+          </span>
+        </a>
+
+        <nav class="nav nav--desktop" aria-label="Primary">
+          <a href="./index.html" data-route="home">Home</a>
+          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
+          <a href="./how-it-works.html" data-route="how">How It Works</a>
+          <a href="./our-mission.html" data-route="mission">Our Mission</a>
+          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+        </nav>
+
+        <div class="header__actions">
+          <a class="btn btn--ghost" href="./cart.html" id="cartLink">
+            Cart <span class="pill" id="cartCount">0</span>
+          </a>
+          <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
+
+          <button
+            class="btn btn--ghost navToggle"
+            type="button"
+            id="navToggle"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobileNav"
+          >
+            ☰
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav nav--mobile" id="mobileNav" aria-label="Primary mobile" hidden>
+        <div class="container nav--mobile__inner">
+          <a href="./index.html" data-route="home">Home</a>
+          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
+          <a href="./how-it-works.html" data-route="how">How It Works</a>
+          <a href="./our-mission.html" data-route="mission">Our Mission</a>
+          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+          <a href="./cart.html">Cart</a>
+          <a href="./contact.html">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="container">
+        <section class="card hero">
+          <div class="hero__inner">
+            <div class="hero__kicker">Cart</div>
+            <h1 class="h2" style="margin-top:10px;">Review and place your order</h1>
+            <p class="muted" style="margin:0;">
+              Surplus items are limited. Confirm quantities and pickup/delivery before placing your order.
+            </p>
+          </div>
+        </section>
+
+        <section class="section grid grid--2">
+          <div class="card">
+            <div class="card__pad">
+              <h2 class="h2">Items</h2>
+              <div id="cartItems" class="grid" style="gap:12px; margin-top:12px;"></div>
+
+              <div id="cartEmpty" class="card" style="display:none; margin-top:12px; border-radius:16px;">
+                <div class="card__pad">
+                  <strong>Your cart is empty.</strong>
+                  <p class="muted" style="margin:6px 0 0;">Browse deals and add items for tonight.</p>
+                  <div class="section" style="margin-top:12px;">
+                    <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__pad">
+              <h2 class="h2">Summary</h2>
+
+              <div id="cartSummary" class="grid" style="gap:10px; margin-top:12px;"></div>
+
+              <hr class="hr" />
+
+              <h3 class="h3" style="margin-bottom:6px;">Place order</h3>
+              <p class="tiny muted" style="margin-top:0;">
+                You’ll receive confirmation details and pickup windows per partner.
+              </p>
+
+              <form id="checkoutForm" class="grid" style="gap:10px; margin-top:12px;">
+                <div class="field">
+                  <label for="fullName">Full name</label>
+                  <input id="fullName" required placeholder="Your name" />
+                </div>
+
+                <div class="field">
+                  <label for="phone">Phone</label>
+                  <input id="phone" required placeholder="416-247-BITE" />
+                </div>
+
+                <div class="field">
+                  <label for="notes">Order notes (optional)</label>
+                  <input id="notes" placeholder="Allergies, pickup notes, delivery notes…" />
+                </div>
+
+                <button class="btn btn--primary" type="submit" id="placeOrderBtn">Place order</button>
+                <div id="orderMsg" class="tiny muted" role="status"></div>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div>
+          <div class="footer__brand">
+            <span class="brand__mark" aria-hidden="true"></span>
+            <strong>LastBite</strong>
+          </div>
+          <p class="muted">
+            End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
+          </p>
+        </div>
+
+        <div>
+          <strong>Explore</strong>
+          <div class="footer__links">
+            <a href="./browse-deals.html">Browse Deals</a>
+            <a href="./how-it-works.html">How It Works</a>
+            <a href="./our-mission.html">Our Mission</a>
+            <a href="./impact-tracker.html">Impact Tracker</a>
+            <a href="./cart.html">Cart</a>
+          </div>
+        </div>
+
+        <div>
+          <strong>Contact</strong>
+          <div class="footer__links">
+            <a href="./contact.html">Contact page</a>
+            <a href="mailto:lastbite@gmail.com">lastbite@gmail.com</a>
+            <a href="tel:+14162472483">416-247-BITE</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container footer__bottom">
+        <span class="tiny muted">© <span id="year"></span> LastBite</span>
+        <span class="tiny muted">lastbite@gmail.com • 416-247-BITE</span>
+      </div>
+    </footer>
+
+    <div id="modalRoot" class="modalRoot" hidden></div>
+    <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="./data.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
