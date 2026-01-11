@@ -1,167 +1,124 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LastBite — Impact Tracker</title>
-    <meta name="description" content="Track your rescued meals, food saved, CO₂ avoided, savings, and estimated donations." />
-    <meta name="theme-color" content="#193B1B" />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Impact Tracker — LastBite</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="impact">
+  <header class="header">
+    <div class="container header__row">
+      <a class="brand" href="./index.html" aria-label="LastBite">
+        <img src="assets/lastbite.png" alt="LastBite logo" class="brandLogo" />
+      </a>
 
-  <body data-page="impact">
-    <a class="skip-link" href="#main">Skip to content</a>
-
-    <header class="header">
-      <div class="container header__inner">
-        <a class="brand" href="./index.html" aria-label="LastBite home">
-          <span class="brand__mark" aria-hidden="true"></span>
-          <span class="brand__text">
-            <strong>LastBite</strong>
-            <small>Save food. Save money.</small>
-          </span>
-        </a>
-
-        <nav class="nav nav--desktop" aria-label="Primary">
-          <a href="./index.html" data-route="home">Home</a>
-          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
-          <a href="./how-it-works.html" data-route="how">How It Works</a>
-          <a href="./our-mission.html" data-route="mission">Our Mission</a>
-          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
-        </nav>
-
-        <div class="header__actions">
-          <a class="btn btn--ghost" href="./cart.html" id="cartLink">
-            Cart <span class="pill" id="cartCount">0</span>
-          </a>
-          <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
-
-          <button
-            class="btn btn--ghost navToggle"
-            type="button"
-            id="navToggle"
-            aria-label="Open menu"
-            aria-expanded="false"
-            aria-controls="mobileNav"
-          >
-            ☰
-          </button>
-        </div>
-      </div>
-
-      <nav class="nav nav--mobile" id="mobileNav" aria-label="Primary mobile" hidden>
-        <div class="container nav--mobile__inner">
-          <a href="./index.html" data-route="home">Home</a>
-          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
-          <a href="./how-it-works.html" data-route="how">How It Works</a>
-          <a href="./our-mission.html" data-route="mission">Our Mission</a>
-          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
-          <a href="./cart.html">Cart</a>
-          <a href="./contact.html">Contact</a>
-        </div>
+      <nav class="nav nav--desktop" aria-label="Primary">
+        <a data-route="home" href="./index.html">Home</a>
+        <a data-route="deals" href="./browse-deals.html">Browse Deals</a>
+        <a data-route="how" href="./how-it-works.html">How It Works</a>
+        <a data-route="mission" href="./our-mission.html">Our Mission</a>
+        <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
+        <a data-route="contact" href="./contact.html">Contact</a>
       </nav>
-    </header>
 
-    <main id="main" class="main">
-      <div class="container">
-        <section class="card hero">
-          <div class="hero__inner">
-            <div class="hero__kicker">Impact Tracker</div>
-            <h1 class="h2" style="margin-top:10px;">Your savings and impact</h1>
-            <p class="muted" style="margin:0; max-width: 78ch;">
-              We estimate food saved and CO₂ avoided based on meals rescued.
-              Estimated donation is based on 5% of LastBite profits.
-            </p>
-          </div>
-        </section>
-
-        <section class="section grid grid--2">
-          <div class="card"><div class="card__pad">
-            <h2 class="h2">Your totals</h2>
-            <div class="grid grid--3" style="margin-top:12px; gap:10px;" id="yourImpactRow1"></div>
-            <div class="grid grid--3" style="margin-top:10px; gap:10px;" id="yourImpactRow2"></div>
-
-            <div class="section" style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
-              <a class="btn btn--primary" href="./browse-deals.html">Browse deals</a>
-              <button class="btn btn--ghost" type="button" id="resetImpact">Reset impact</button>
-            </div>
-
-            <p class="tiny muted" style="margin-top:12px;">
-              Factors: <span id="factorLine"></span>
-            </p>
-          </div></div>
-
-          <div class="card"><div class="card__pad">
-            <h2 class="h2">What counts as “impact”?</h2>
-            <ul style="margin:0; padding-left:18px;">
-              <li><strong>Meals rescued:</strong> items ordered through LastBite.</li>
-              <li><strong>Food saved:</strong> estimated weight per meal rescued.</li>
-              <li><strong>CO₂ avoided:</strong> estimated CO₂e per meal rescued.</li>
-              <li><strong>Savings:</strong> original menu value minus LastBite price.</li>
-              <li><strong>Donation:</strong> 5% of profits directed to WFP.</li>
-            </ul>
-            <div class="section" style="margin-top:12px;">
-              <a class="btn btn--ghost" href="./our-mission.html">Read our mission</a>
-            </div>
-          </div></div>
-        </section>
-
-        <section class="section">
-          <div class="section__head">
-            <div>
-              <h2 class="h2">Recent orders</h2>
-              <p class="muted" style="margin:0;">Your latest orders and what they saved.</p>
-            </div>
-          </div>
-
-          <div class="grid" style="gap:12px;" id="recentOrders"></div>
-        </section>
+      <div class="header__actions">
+        <a class="btn btn--ghost" href="./cart.html">
+          Cart <span class="cartCount" id="cartCount">0</span>
+        </a>
+        <button class="btn btn--ghost navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileNav">☰</button>
       </div>
-    </main>
+    </div>
 
-    <footer class="footer">
-      <div class="container footer__grid">
-        <div>
-          <div class="footer__brand">
-            <span class="brand__mark" aria-hidden="true"></span>
-            <strong>LastBite</strong>
-          </div>
+    <div class="mobileNav" id="mobileNav" hidden>
+      <div class="container mobileNav__inner">
+        <a data-route="home" href="./index.html">Home</a>
+        <a data-route="deals" href="./browse-deals.html">Browse Deals</a>
+        <a data-route="how" href="./how-it-works.html">How It Works</a>
+        <a data-route="mission" href="./our-mission.html">Our Mission</a>
+        <a data-route="impact" href="./impact-tracker.html">Impact Tracker</a>
+        <a data-route="contact" href="./contact.html">Contact</a>
+        <a href="./cart.html">Cart (<span id="cartCountMobile">0</span>)</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="section">
+      <div class="container">
+        <div class="pageHead">
+          <h1 class="h2">Impact Tracker</h1>
           <p class="muted">
-            End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
+            We estimate impact using meals rescued (food and CO₂e per meal). <span id="factorLine"></span>
           </p>
         </div>
 
-        <div>
-          <strong>Explore</strong>
-          <div class="footer__links">
-            <a href="./browse-deals.html">Browse Deals</a>
-            <a href="./how-it-works.html">How It Works</a>
-            <a href="./our-mission.html">Our Mission</a>
-            <a href="./impact-tracker.html">Impact Tracker</a>
-            <a href="./cart.html">Cart</a>
+        <!-- ALL USERS (community totals) -->
+        <section id="allUsersImpactSection" class="container" style="padding:0;">
+          <div class="card" style="border-radius:18px; margin: 14px 0 18px;">
+            <div class="card__pad">
+              <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline;">
+                <div>
+                  <div class="tiny muted">All users (total)</div>
+                  <div class="h3" style="margin:0;">LastBite Community Impact</div>
+                </div>
+                <div class="badge">Live totals</div>
+              </div>
+              <div id="globalImpactRow1" class="badgeRow badgeRow--wrap" style="margin-top:12px;"></div>
+              <div id="globalImpactRow2" class="badgeRow badgeRow--wrap" style="margin-top:10px;"></div>
+              <div class="tiny muted" style="margin-top:10px;">
+                Includes pickup + delivery orders across the platform.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid grid--2">
+          <div class="card">
+            <div class="card__pad">
+              <div class="tiny muted">You</div>
+              <div class="h3" style="margin:0;">Your impact</div>
+              <div id="yourImpactRow1" class="badgeRow badgeRow--wrap" style="margin-top:12px;"></div>
+              <div id="yourImpactRow2" class="badgeRow badgeRow--wrap" style="margin-top:10px;"></div>
+              <hr class="hr" />
+              <div class="tiny muted">Make a purchase to increase your totals.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__pad">
+              <div class="tiny muted">This site (device)</div>
+              <div class="h3" style="margin:0;">Company totals</div>
+              <div id="companyImpactRow1" class="badgeRow badgeRow--wrap" style="margin-top:12px;"></div>
+              <div id="companyImpactRow2" class="badgeRow badgeRow--wrap" style="margin-top:10px;"></div>
+              <hr class="hr" />
+              <button class="btn btn--ghost" id="resetImpact" type="button">Reset totals</button>
+            </div>
           </div>
         </div>
 
-        <div>
-          <strong>Contact</strong>
-          <div class="footer__links">
-            <a href="./contact.html">Contact page</a>
-            <a href="mailto:lastbite@gmail.com">lastbite@gmail.com</a>
-            <a href="tel:+14162472483">416-247-BITE</a>
+        <div class="card" style="margin-top:16px;">
+          <div class="card__pad">
+            <div class="h3">Recent orders</div>
+            <div id="recentOrders" class="grid" style="gap:12px; margin-top:12px;"></div>
           </div>
         </div>
+
       </div>
+    </section>
+  </main>
 
-      <div class="container footer__bottom">
-        <span class="tiny muted">© <span id="year"></span> LastBite</span>
-        <span class="tiny muted">lastbite@gmail.com • 416-247-BITE</span>
-      </div>
-    </footer>
+  <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <div id="modalRoot" class="modalRoot" hidden></div>
 
-    <div id="modalRoot" class="modalRoot" hidden></div>
-    <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <footer class="footer">
+    <div class="container footer__row">
+      <div class="tiny muted">© <span id="year"></span> LastBite</div>
+      <div class="tiny muted">Email: lastbite@gmail.com • Phone: 416-247-BITE</div>
+    </div>
+  </footer>
 
-    <script src="./data.js"></script>
-    <script src="./main.js"></script>
-  </body>
+  <script src="./data.js"></script>
+  <script src="./main.js"></script>
+</body>
 </html>
