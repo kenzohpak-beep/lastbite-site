@@ -31,9 +31,9 @@
         </nav>
 
         <div class="header__actions">
-          <button class="btn btn--ghost" type="button" id="cartBtn">
+          <a class="btn btn--ghost" href="./cart.html" id="cartLink">
             Cart <span class="pill" id="cartCount">0</span>
-          </button>
+          </a>
           <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
 
           <button
@@ -56,6 +56,8 @@
           <a href="./how-it-works.html" data-route="how">How It Works</a>
           <a href="./our-mission.html" data-route="mission">Our Mission</a>
           <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+          <a href="./cart.html">Cart</a>
+          <a href="./contact.html">Contact</a>
         </div>
       </nav>
     </header>
@@ -65,43 +67,47 @@
         <section class="card hero">
           <div class="hero__inner">
             <div class="hero__kicker">Our Mission</div>
-            <h1 class="h2" style="margin-top:10px;">Turn end-of-day surplus into affordable meals.</h1>
-            <p class="muted" style="margin:0; max-width: 70ch;">
-              LastBite reduces food waste by helping local businesses sell unsold but perfectly good food at a steep discount.
-              Customers save money, merchants earn incremental revenue, and the environment benefits.
+            <h1 class="h2" style="margin-top:10px;">Reduce food waste by making surplus affordable and convenient</h1>
+            <p class="muted" style="margin:0; max-width: 74ch;">
+              Perfectly good food is thrown away every day at closing time. LastBite helps local businesses sell surplus at
+              deep discounts, so customers get affordable meals and communities generate less waste.
             </p>
 
             <div class="hero__stats">
-              <span class="statPill">🎯 Focused: <b>surplus-only</b></span>
-              <span class="statPill">💸 Discounts: <b>40–70%</b></span>
-              <span class="statPill">🎗️ Donate: <b>5%</b> of profits</span>
+              <span class="statPill">🎯 Surplus-only <b>focus</b></span>
+              <span class="statPill">💸 Guaranteed <b>discounts</b></span>
+              <span class="statPill">🎗️ 5% profits <b>to WFP</b></span>
             </div>
           </div>
         </section>
 
         <section class="section grid grid--2">
           <div class="card"><div class="card__pad">
-            <h2 class="h2">What makes us different</h2>
-            <ul style="margin:0; padding-left: 18px;">
-              <li><strong>Surplus-only:</strong> not a general food delivery app.</li>
-              <li><strong>Guaranteed discounts:</strong> typically 40–70% off.</li>
-              <li><strong>Off-peak operations:</strong> clustered at closing time, keeping costs lower.</li>
-              <li><strong>Impact-driven:</strong> food/CO₂ saved shown in the product.</li>
-              <li><strong>Social enterprise:</strong> 5% of profits donated to WFP.</li>
-            </ul>
-          </div></div>
-
-          <div class="card"><div class="card__pad">
-            <h2 class="h2">Future roadmap</h2>
-            <ul style="margin:0; padding-left: 18px;">
-              <li>Surplus groceries + bakery boxes (breakfast / produce boxes)</li>
-              <li>Subscriptions and corporate waste-reduction lunch programs</li>
-              <li>Reusable packaging with partner restaurants</li>
-              <li>Waste analytics for restaurants (planning + forecasting insights)</li>
+            <h2 class="h2">How we create impact</h2>
+            <ul style="margin:0; padding-left:18px;">
+              <li><strong>Rescue surplus:</strong> unsold food is redirected to customers instead of the bin.</li>
+              <li><strong>Make food affordable:</strong> students, families, and workers get real meals at lower cost.</li>
+              <li><strong>Support local businesses:</strong> partners earn incremental revenue and gain sustainability visibility.</li>
+              <li><strong>Reduce emissions:</strong> less wasted food means fewer embedded emissions are wasted.</li>
+              <li><strong>Give back:</strong> 5% of LastBite profits are donated to the UN World Food Programme (WFP).</li>
             </ul>
 
             <div class="section" style="margin-top:12px;">
-              <button class="btn btn--primary" type="button" id="partnerCta">Become a partner (demo)</button>
+              <a class="btn btn--ghost" href="./impact-tracker.html">See the Impact Tracker</a>
+            </div>
+          </div></div>
+
+          <div class="card"><div class="card__pad">
+            <h2 class="h2">What makes LastBite different</h2>
+            <ul style="margin:0; padding-left:18px;">
+              <li><strong>Not a full-menu delivery app:</strong> only end-of-day surplus listings.</li>
+              <li><strong>Off-peak operations:</strong> closing-time clustering helps reduce operational cost.</li>
+              <li><strong>Transparent value:</strong> each listing shows discount versus original value.</li>
+              <li><strong>Built-in tracking:</strong> savings and impact update after you order.</li>
+            </ul>
+
+            <div class="section" style="margin-top:12px;">
+              <button class="btn btn--primary" type="button" id="partnerCta">Become a partner</button>
             </div>
           </div></div>
         </section>
@@ -111,15 +117,16 @@
             <div class="card__pad">
               <div class="section__head" style="margin-bottom:0;">
                 <div>
-                  <h2 class="h2">Example partners (research list)</h2>
-                  <p class="muted" style="margin:0;">Target bakeries, cafés and shops to start in a dense pilot neighborhood.</p>
+                  <h2 class="h2">Partner categories</h2>
+                  <p class="muted" style="margin:0;">Bakeries, cafés, and shops are ideal for surplus deals near closing.</p>
                 </div>
               </div>
 
               <div class="grid grid--4" style="margin-top:12px;" id="partnerBadges"></div>
 
-              <div class="section" style="margin-top:14px;">
-                <a class="btn btn--ghost" href="./browse-deals.html">See sample deals</a>
+              <div class="section" style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
+                <a class="btn btn--ghost" href="./contact.html">Contact us</a>
               </div>
             </div>
           </div>
@@ -137,7 +144,6 @@
           <p class="muted">
             End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
           </p>
-          <p class="tiny muted">Prototype site: checkout is simulated; impact numbers are estimates.</p>
         </div>
 
         <div>
@@ -147,21 +153,23 @@
             <a href="./how-it-works.html">How It Works</a>
             <a href="./our-mission.html">Our Mission</a>
             <a href="./impact-tracker.html">Impact Tracker</a>
+            <a href="./cart.html">Cart</a>
           </div>
         </div>
 
         <div>
           <strong>Contact</strong>
           <div class="footer__links">
-            <a href="#" id="contactLink">Email</a>
-            <a href="#" id="partnerLink">Become a partner</a>
+            <a href="./contact.html">Contact page</a>
+            <a href="mailto:lastbite@gmail.com">lastbite@gmail.com</a>
+            <a href="tel:+14162472483">416-247-BITE</a>
           </div>
         </div>
       </div>
 
       <div class="container footer__bottom">
         <span class="tiny muted">© <span id="year"></span> LastBite</span>
-        <span class="tiny muted">Static site (GitHub Pages friendly)</span>
+        <span class="tiny muted">lastbite@gmail.com • 416-247-BITE</span>
       </div>
     </footer>
 
