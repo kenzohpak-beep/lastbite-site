@@ -1,1 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LastBite — How It Works</title>
+    <meta name="description" content="How LastBite works: partners list surplus near closing, customers reserve, and impact is tracked." />
+    <meta name="theme-color" content="#193B1B" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
 
+  <body data-page="how">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="header">
+      <div class="container header__inner">
+        <a class="brand" href="./index.html" aria-label="LastBite home">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__text">
+            <strong>LastBite</strong>
+            <small>Save food. Save money.</small>
+          </span>
+        </a>
+
+        <nav class="nav nav--desktop" aria-label="Primary">
+          <a href="./index.html" data-route="home">Home</a>
+          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
+          <a href="./how-it-works.html" data-route="how">How It Works</a>
+          <a href="./our-mission.html" data-route="mission">Our Mission</a>
+          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+        </nav>
+
+        <div class="header__actions">
+          <button class="btn btn--ghost" type="button" id="cartBtn">
+            Cart <span class="pill" id="cartCount">0</span>
+          </button>
+          <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
+
+          <button
+            class="btn btn--ghost navToggle"
+            type="button"
+            id="navToggle"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobileNav"
+          >
+            ☰
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav nav--mobile" id="mobileNav" aria-label="Primary mobile" hidden>
+        <div class="container nav--mobile__inner">
+          <a href="./index.html" data-route="home">Home</a>
+          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
+          <a href="./how-it-works.html" data-route="how">How It Works</a>
+          <a href="./our-mission.html" data-route="mission">Our Mission</a>
+          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="container">
+        <section class="card hero">
+          <div class="hero__inner">
+            <div class="hero__kicker">How It Works</div>
+            <h1 class="h2" style="margin-top:10px;">A surplus-only flow built for closing time.</h1>
+            <p class="muted" style="margin:0; max-width: 70ch;">
+              Partners list surplus near closing. Customers reserve through LastBite.
+              Orders cluster when kitchens and drivers are less busy — keeping fees lower.
+            </p>
+          </div>
+        </section>
+
+        <section class="section grid grid--3">
+          <div class="card"><div class="card__pad">
+            <div class="h3">1) Partners list surplus</div>
+            <p class="muted" style="margin:0;">Restaurants, cafés and shops post end-of-day items at <strong>40–70% off</strong>.</p>
+          </div></div>
+
+          <div class="card"><div class="card__pad">
+            <div class="h3">2) You reserve</div>
+            <p class="muted" style="margin:0;">Browse by category and dietary needs. Reserve for a timed pickup window (or delivery where offered).</p>
+          </div></div>
+
+          <div class="card"><div class="card__pad">
+            <div class="h3">3) Track impact</div>
+            <p class="muted" style="margin:0;">See estimated meals rescued, food saved, CO₂ avoided — plus your savings.</p>
+          </div></div>
+        </section>
+
+        <section class="section grid grid--2">
+          <div class="card"><div class="card__pad">
+            <h2 class="h2">Pricing (prototype)</h2>
+            <p class="muted" style="margin:0;">Typical discount range: <strong>40–70% off</strong> the original menu value.</p>
+            <div class="section" style="margin-top:12px;">
+              <div class="badge">Pickup: higher margin (no delivery cost)</div>
+              <div class="badge" style="margin-top:8px;">Delivery: available for select partners</div>
+            </div>
+            <p class="tiny muted" style="margin-top:12px;">
+              This demo uses simple assumptions for impact and donation estimates.
+            </p>
+          </div></div>
+
+          <div class="card"><div class="card__pad">
+            <h2 class="h2">FAQ (prototype)</h2>
+            <details>
+              <summary><strong>Are these items safe?</strong></summary>
+              <p class="muted">Partners only list items that are unsold but still good to eat. Always follow allergy notes.</p>
+            </details>
+            <details>
+              <summary><strong>What if I miss the pickup window?</strong></summary>
+              <p class="muted">Pickup windows are short. In a real launch, missed windows may be non-refundable.</p>
+            </details>
+            <details>
+              <summary><strong>How is impact calculated?</strong></summary>
+              <p class="muted">This prototype uses simple estimates per meal. Replace with verified methodology at launch.</p>
+            </details>
+          </div></div>
+        </section>
+
+        <section class="section">
+          <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div>
+          <div class="footer__brand">
+            <span class="brand__mark" aria-hidden="true"></span>
+            <strong>LastBite</strong>
+          </div>
+          <p class="muted">
+            End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
+          </p>
+          <p class="tiny muted">Prototype site: checkout is simulated; impact numbers are estimates.</p>
+        </div>
+
+        <div>
+          <strong>Explore</strong>
+          <div class="footer__links">
+            <a href="./browse-deals.html">Browse Deals</a>
+            <a href="./how-it-works.html">How It Works</a>
+            <a href="./our-mission.html">Our Mission</a>
+            <a href="./impact-tracker.html">Impact Tracker</a>
+          </div>
+        </div>
+
+        <div>
+          <strong>Contact</strong>
+          <div class="footer__links">
+            <a href="#" id="contactLink">Email</a>
+            <a href="#" id="partnerLink">Become a partner</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container footer__bottom">
+        <span class="tiny muted">© <span id="year"></span> LastBite</span>
+        <span class="tiny muted">Static site (GitHub Pages friendly)</span>
+      </div>
+    </footer>
+
+    <div id="modalRoot" class="modalRoot" hidden></div>
+    <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="./data.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
