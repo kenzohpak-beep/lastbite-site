@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LastBite — Home</title>
+    <title>LastBite — Save food. Save money.</title>
     <meta
       name="description"
-      content="LastBite is an end-of-day surplus food platform: 40–70% off pickup or delivery, reducing food waste and donating 5% of profits to WFP."
+      content="LastBite is an end-of-day discounted food platform. Restaurants list surplus near closing; customers get 40–70% off for pickup or delivery. 5% of profits donated to the UN World Food Programme."
     />
     <meta name="theme-color" content="#193B1B" />
     <link rel="stylesheet" href="./styles.css" />
@@ -34,9 +34,9 @@
         </nav>
 
         <div class="header__actions">
-          <button class="btn btn--ghost" type="button" id="cartBtn">
+          <a class="btn btn--ghost" href="./cart.html" id="cartLink">
             Cart <span class="pill" id="cartCount">0</span>
-          </button>
+          </a>
           <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
 
           <button
@@ -59,6 +59,8 @@
           <a href="./how-it-works.html" data-route="how">How It Works</a>
           <a href="./our-mission.html" data-route="mission">Our Mission</a>
           <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+          <a href="./cart.html">Cart</a>
+          <a href="./contact.html">Contact</a>
         </div>
       </nav>
     </header>
@@ -67,24 +69,25 @@
       <div class="container">
         <section class="card hero">
           <div class="hero__inner">
-            <div class="hero__kicker">End-of-day discounted food platform</div>
+            <div class="hero__kicker">End-of-day surplus deals • 40–70% off</div>
             <h1 class="h1">
-              Big discounts on surplus food.<br />
-              Real impact, built in.
+              Great food at closing-time prices.<br />
+              Less waste, more impact.
             </h1>
-            <p class="muted" style="margin:0; max-width: 66ch;">
-              Restaurants and shops list end-of-day surplus near closing. You buy at a large discount for pickup or delivery.
-              Every purchase helps reduce waste — and <strong>5% of profits</strong> are donated to the UN World Food Programme (WFP).
+            <p class="muted" style="margin:0; max-width: 70ch;">
+              Restaurants, cafés and shops list surplus food near closing.
+              You reserve discounted items for pickup or delivery — and every purchase helps cut food waste.
+              <strong>5% of profits</strong> are donated to the UN World Food Programme (WFP).
             </p>
 
             <div class="hero__cta">
-              <a class="btn btn--primary" href="./browse-deals.html">Browse demo deals</a>
+              <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
               <a class="btn btn--ghost" href="./how-it-works.html">How it works</a>
             </div>
 
             <div class="hero__stats">
               <span class="statPill">💸 Typical discount <b>40–70%</b></span>
-              <span class="statPill">🌿 Fight waste with <b>every order</b></span>
+              <span class="statPill">🕗 Built for <b>closing time</b></span>
               <span class="statPill">🎗️ Donate <b>5%</b> of profits</span>
             </div>
           </div>
@@ -93,32 +96,28 @@
         <section class="section grid grid--2">
           <div class="card">
             <div class="card__pad">
-              <h2 class="h2">Check if your area is in the pilot (demo)</h2>
+              <h2 class="h2">Find deals fast</h2>
               <p class="muted" style="margin:0;">
-                We launch neighborhood-by-neighborhood so pickup windows stay tight and discounts stay high.
+                Browse by partner, category, and dietary needs. Reserve items in seconds and pick up within a short window.
               </p>
 
-              <div class="section" style="margin-top:14px;">
-                <form id="areaForm" class="grid" style="gap:10px; max-width:520px;">
-                  <div class="field">
-                    <label for="postal">Postal code</label>
-                    <input id="postal" placeholder="e.g., M5V 2T6" />
-                  </div>
+              <div class="section" style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
+                <a class="btn btn--ghost" href="./cart.html">Go to Cart</a>
+              </div>
 
-                  <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
-                    <button class="btn btn--primary" type="submit">Check my area</button>
-                    <button class="btn btn--ghost" type="button" id="clearPostal">Clear</button>
-                  </div>
-                </form>
-                <p class="tiny muted" id="pilotHint" style="margin-top:10px;"></p>
+              <div class="section">
+                <div class="grid grid--3" style="gap:10px;" id="homeHighlights"></div>
               </div>
             </div>
           </div>
 
           <div class="card">
             <div class="card__pad">
-              <h2 class="h2">Impact totals (demo)</h2>
-              <p class="muted" style="margin:0;">Community baseline + your local demo actions.</p>
+              <h2 class="h2">Your impact</h2>
+              <p class="muted" style="margin:0;">
+                We estimate food saved and CO₂ avoided based on the meals you rescue — plus your savings and estimated donation.
+              </p>
 
               <div class="grid grid--3" style="margin-top:12px; gap:10px;" id="homeImpactRow1"></div>
               <div class="grid grid--3" style="margin-top:10px; gap:10px;" id="homeImpactRow2"></div>
@@ -135,18 +134,18 @@
             <div class="card__pad">
               <div class="section__head" style="margin-bottom:0;">
                 <div>
-                  <h2 class="h2">Join the beta list (demo)</h2>
-                  <p class="muted" style="margin:0;">Get launch updates and early access.</p>
+                  <h2 class="h2">Get updates</h2>
+                  <p class="muted" style="margin:0;">New partners and new deal drops.</p>
                 </div>
               </div>
 
-              <form id="waitlistForm" class="grid" style="gap:10px; margin-top:12px; max-width:680px;">
+              <form id="updatesForm" class="grid" style="gap:10px; margin-top:12px; max-width:680px;">
                 <div class="field">
                   <label for="email">Email</label>
                   <input id="email" type="email" placeholder="you@example.com" required />
                 </div>
-                <button class="btn btn--primary" type="submit">Join beta</button>
-                <div id="waitlistMsg" class="tiny muted" role="status"></div>
+                <button class="btn btn--primary" type="submit">Subscribe</button>
+                <div id="updatesMsg" class="tiny muted" role="status"></div>
               </form>
             </div>
           </div>
@@ -164,7 +163,6 @@
           <p class="muted">
             End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
           </p>
-          <p class="tiny muted">Prototype site: checkout is simulated; impact numbers are estimates.</p>
         </div>
 
         <div>
@@ -174,25 +172,26 @@
             <a href="./how-it-works.html">How It Works</a>
             <a href="./our-mission.html">Our Mission</a>
             <a href="./impact-tracker.html">Impact Tracker</a>
+            <a href="./cart.html">Cart</a>
           </div>
         </div>
 
         <div>
           <strong>Contact</strong>
           <div class="footer__links">
-            <a href="#" id="contactLink">Email</a>
-            <a href="#" id="partnerLink">Become a partner</a>
+            <a href="./contact.html">Contact page</a>
+            <a href="mailto:lastbite@gmail.com">lastbite@gmail.com</a>
+            <a href="tel:+14162472483">416-247-BITE</a>
           </div>
         </div>
       </div>
 
       <div class="container footer__bottom">
         <span class="tiny muted">© <span id="year"></span> LastBite</span>
-        <span class="tiny muted">Static site (GitHub Pages friendly)</span>
+        <span class="tiny muted">lastbite@gmail.com • 416-247-BITE</span>
       </div>
     </footer>
 
-    <!-- IMPORTANT: modalRoot is hidden + display:none by default (prevents “dim overlay” bug) -->
     <div id="modalRoot" class="modalRoot" hidden></div>
     <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
 
