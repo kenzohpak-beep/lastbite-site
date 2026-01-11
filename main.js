@@ -5,7 +5,8 @@
     cart: "lastbite_cart_v2",
     orders: "lastbite_orders_v2",
     impact: "lastbite_user_impact_v2",
-    companyImpact: "lastbite_company_impact_v2"
+    companyImpact: "lastbite_company_impact_v2",
+    globalImpact: "lastbite_global_impact_v2" // "All users" (fake totals)
   };
 
   /* ---------------------------------
@@ -62,7 +63,6 @@
   function writeJSON(key, value) {
     const serialized = JSON.stringify(value);
     safeLocalStorageSet(key, serialized);
-    // Mirror into window.name so it still works if storage is blocked / file://
     const store = readWindowNameStore();
     store[key] = value;
     writeWindowNameStore(store);
@@ -268,7 +268,6 @@
       .map((it) => {
         const deal = D?.DEALS ? D.DEALS.find((x) => x.id === it.id) : null;
 
-        // Use deal if found; otherwise use snapshot stored in cart line
         const snapDeal = {
           id: it.id,
           title: it.title || "Item",
@@ -310,7 +309,6 @@
 
     if (existing) {
       existing.qty = (Number(existing.qty) || 0) + q;
-      // keep snapshot updated
       existing.title = deal.title;
       existing.partner = deal.partner;
       existing.category = deal.category;
@@ -329,7 +327,6 @@
         id: dealId,
         mode,
         qty: q,
-        // snapshot for cart page reliability
         title: deal.title,
         partner: deal.partner,
         category: deal.category,
@@ -351,7 +348,7 @@
   }
 
   /* ---------------------------------
-    Impact (Your + Company totals)
+    Impact (Your + Company + All Users)
   --------------------------------- */
   function getUserImpact() {
     return readJSON(LS.impact, { meals: 0, kgFood: 0, kgCO2e: 0, donated: 0, savings: 0 });
@@ -363,8 +360,6 @@
 
   function getCompanyImpact() {
     const f = impactFactors();
-
-    // Seed totals (shows real numbers immediately)
     const seedMeals = D?.IMPACT?.seedCompanyMeals ?? 12500;
     const seedDonated = D?.IMPACT?.seedCompanyDonated ?? 5200;
     const seedSavings = D?.IMPACT?.seedCompanySavings ?? 78000;
@@ -383,6 +378,32 @@
 
   function setCompanyImpact(v) {
     writeJSON(LS.companyImpact, v);
+  }
+
+  // "All users" (fake totals). Stored locally, seeded large, increments on checkout.
+  function getGlobalImpact() {
+    const f = impactFactors();
+
+    const seedOrders = D?.IMPACT?.seedGlobalOrders ?? 184000;
+    const seedMeals = D?.IMPACT?.seedGlobalMeals ?? 520000;
+    const seedDonated = D?.IMPACT?.seedGlobalDonated ?? 235000;
+    const seedSavings = D?.IMPACT?.seedGlobalSavings ?? 1200000;
+
+    const stored = readJSON(LS.globalImpact, null);
+    if (stored && typeof stored === "object") return stored;
+
+    return {
+      orders: seedOrders,
+      meals: seedMeals,
+      kgFood: seedMeals * f.kgFoodPerMeal,
+      kgCO2e: seedMeals * f.kgCO2ePerMeal,
+      donated: seedDonated,
+      savings: seedSavings
+    };
+  }
+
+  function setGlobalImpact(v) {
+    writeJSON(LS.globalImpact, v);
   }
 
   function computeImpactForOrder(lines) {
@@ -525,7 +546,7 @@
                 <div class="field">
                   <label for="qtySelect">Quantity</label>
                   <select id="qtySelect">
-                    ${[1,2,3,4,5].map((n) => `<option value="${n}">${n}</option>`).join("")}
+                    ${[1, 2, 3, 4, 5].map((n) => `<option value="${n}">${n}</option>`).join("")}
                   </select>
                 </div>
 
@@ -602,7 +623,9 @@
     sortEl.innerHTML = sortOptions.map((o) => `<option value="${o.v}">${o.t}</option>`).join("");
 
     const state = { category: "All", q: "", partner: "all", tag: "all", sort: "recommended" };
-    function normalize(s) { return String(s).toLowerCase(); }
+    function normalize(s) {
+      return String(s).toLowerCase();
+    }
 
     function matches(deal) {
       const catOk = state.category === "All" ? true : deal.category === state.category;
@@ -610,8 +633,7 @@
 
       const qOk = !state.q
         ? true
-        : [deal.title, deal.partner, deal.description, deal.category]
-            .some((x) => normalize(x).includes(normalize(state.q)));
+        : [deal.title, deal.partner, deal.description, deal.category].some((x) => normalize(x).includes(normalize(state.q)));
 
       const tagOk = (function () {
         if (state.tag === "all") return true;
@@ -630,7 +652,7 @@
       else if (state.sort === "endingSoon") copy.sort((a, b) => parseEndTimeToday(a.windowEnd) - parseEndTimeToday(b.windowEnd));
       else if (state.sort === "nearest") copy.sort((a, b) => a.distanceKm - b.distanceKm);
       else if (state.sort === "lowestPrice") copy.sort((a, b) => a.price - b.price);
-      else copy.sort((a, b) => (pctOff(b) - pctOff(a)) || (a.distanceKm - b.distanceKm));
+      else copy.sort((a, b) => pctOff(b) - pctOff(a) || a.distanceKm - b.distanceKm);
       return copy;
     }
 
@@ -662,10 +684,22 @@
       render();
     });
 
-    qEl.addEventListener("input", () => { state.q = qEl.value.trim(); render(); });
-    partnerEl.addEventListener("change", () => { state.partner = partnerEl.value; render(); });
-    tagEl.addEventListener("change", () => { state.tag = tagEl.value; render(); });
-    sortEl.addEventListener("change", () => { state.sort = sortEl.value; render(); });
+    qEl.addEventListener("input", () => {
+      state.q = qEl.value.trim();
+      render();
+    });
+    partnerEl.addEventListener("change", () => {
+      state.partner = partnerEl.value;
+      render();
+    });
+    tagEl.addEventListener("change", () => {
+      state.tag = tagEl.value;
+      render();
+    });
+    sortEl.addEventListener("change", () => {
+      state.sort = sortEl.value;
+      render();
+    });
 
     render();
     setInterval(render, 60000);
@@ -765,9 +799,53 @@
     if (cta) cta.addEventListener("click", openPartnerModal);
   }
 
+  function ensureGlobalImpactBlock() {
+    const page = document.body.getAttribute("data-page");
+    if (page !== "impact") return;
+
+    // If they already have a section container in HTML, we won't auto-inject
+    const already =
+      document.getElementById("allUsersImpactRow1") ||
+      document.getElementById("globalImpactRow1") ||
+      document.getElementById("allUsersImpactSection") ||
+      document.getElementById("globalImpactSection") ||
+      document.getElementById("allUsersImpactAuto");
+
+    if (already) return;
+
+    const mainContainer = document.querySelector("main .container") || document.querySelector("main") || document.body;
+    const block = document.createElement("section");
+    block.id = "allUsersImpactAuto";
+    block.innerHTML = `
+      <div class="card" style="border-radius:18px; margin: 14px 0 18px;">
+        <div class="card__pad">
+          <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline;">
+            <div>
+              <div class="tiny muted">All users (total)</div>
+              <div class="h3" style="margin:0;">LastBite Community Impact</div>
+            </div>
+            <div class="badge">Live totals</div>
+          </div>
+          <div id="globalImpactRow1" class="grid" style="margin-top:12px; gap:10px;"></div>
+          <div id="globalImpactRow2" class="grid" style="margin-top:10px; gap:10px;"></div>
+          <div class="tiny muted" style="margin-top:10px;">
+            Includes pickup + delivery orders across the platform.
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Insert near top of the page content
+    if (mainContainer.firstChild) mainContainer.insertBefore(block, mainContainer.firstChild);
+    else mainContainer.appendChild(block);
+  }
+
   function initImpactPage() {
+    ensureGlobalImpactBlock();
+
     const ui = getUserImpact();
     const co = getCompanyImpact();
+    const gl = getGlobalImpact();
     const orders = readJSON(LS.orders, []);
 
     // Your impact (rows)
@@ -789,7 +867,6 @@
       `;
     }
 
-    // Optional numeric placeholders (if present)
     setText("yourMeals", Number(ui.meals || 0).toLocaleString());
     setText("yourFood", `${fmt1(ui.kgFood)} kg`);
     setText("yourCO2", `${fmt1(ui.kgCO2e)} kg`);
@@ -823,12 +900,44 @@
       `;
     }
 
-    // Optional company numeric placeholders (if present)
     setText("companyMeals", Number(co.meals || 0).toLocaleString());
     setText("companyFood", `${fmt1(co.kgFood)} kg`);
     setText("companyCO2", `${fmt1(co.kgCO2e)} kg`);
     setText("companyDonated", money(co.donated));
     setText("companySavings", money(co.savings));
+
+    // All users (global) rows (supports multiple IDs + auto-injected)
+    const g1 =
+      document.getElementById("allUsersImpactRow1") ||
+      document.getElementById("globalImpactRow1") ||
+      document.getElementById("allUsersImpactBadges1");
+
+    const g2 =
+      document.getElementById("allUsersImpactRow2") ||
+      document.getElementById("globalImpactRow2") ||
+      document.getElementById("allUsersImpactBadges2");
+
+    if (g1) {
+      g1.innerHTML = `
+        <div class="badge badge--lime">🍽️ ${Number(gl.meals || 0).toLocaleString()} meals</div>
+        <div class="badge">🥕 ${fmt1(gl.kgFood)} kg food</div>
+        <div class="badge">🌿 ${fmt1(gl.kgCO2e)} kg CO₂e</div>
+      `;
+    }
+    if (g2) {
+      g2.innerHTML = `
+        <div class="badge badge--orange">🎗️ ${money(gl.donated)} donated</div>
+        <div class="badge">💸 ${money(gl.savings)} saved</div>
+        <div class="badge">🧾 ${Number(gl.orders || 0).toLocaleString()} orders</div>
+      `;
+    }
+
+    setText("globalMeals", Number(gl.meals || 0).toLocaleString());
+    setText("globalFood", `${fmt1(gl.kgFood)} kg`);
+    setText("globalCO2", `${fmt1(gl.kgCO2e)} kg`);
+    setText("globalDonated", money(gl.donated));
+    setText("globalSavings", money(gl.savings));
+    setText("globalOrders", Number(gl.orders || 0).toLocaleString());
 
     // Factors line
     const f = impactFactors();
@@ -876,7 +985,7 @@
         `<div class="card"><div class="card__pad"><p class="muted">No orders yet. Add deals and place an order from your cart.</p></div></div>`;
     }
 
-    // Reset (user + company)
+    // Reset (user + company + global)
     const reset = document.getElementById("resetImpact");
     if (reset) {
       reset.addEventListener("click", () => {
@@ -884,12 +993,14 @@
         try { localStorage.removeItem(LS.impact); } catch {}
         try { localStorage.removeItem(LS.cart); } catch {}
         try { localStorage.removeItem(LS.companyImpact); } catch {}
+        try { localStorage.removeItem(LS.globalImpact); } catch {}
 
         const store = readWindowNameStore();
         delete store[LS.orders];
         delete store[LS.impact];
         delete store[LS.cart];
         delete store[LS.companyImpact];
+        delete store[LS.globalImpact];
         writeWindowNameStore(store);
 
         renderCartCount();
@@ -1019,10 +1130,8 @@
 
       const qty = line.qty;
 
-      // remove old line
       let next = cart.filter((x) => !(x.id === id && x.mode === oldMode));
 
-      // add/merge new line
       const existing = next.find((x) => x.id === id && x.mode === newMode);
       if (existing) {
         existing.qty = (Number(existing.qty) || 0) + qty;
@@ -1082,6 +1191,18 @@
         savings: Number(co.savings || 0) + savings
       };
       setCompanyImpact(nextCompany);
+
+      // Update "All users" (fake totals)
+      const gl = getGlobalImpact();
+      const nextGlobal = {
+        orders: Number(gl.orders || 0) + 1,
+        meals: Number(gl.meals || 0) + impact.meals,
+        kgFood: Number(gl.kgFood || 0) + impact.kgFood,
+        kgCO2e: Number(gl.kgCO2e || 0) + impact.kgCO2e,
+        donated: Number(gl.donated || 0) + impact.donated,
+        savings: Number(gl.savings || 0) + savings
+      };
+      setGlobalImpact(nextGlobal);
 
       setCart([]);
       render();
@@ -1152,7 +1273,6 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    // If data.js loads after main.js, wait briefly
     const start = Date.now();
     (function waitForData() {
       D = window.LastBiteData || D;
