@@ -2,7 +2,6 @@
   const D = window.LastBiteData;
   if (!D) return;
 
-  /* ---------- storage keys ---------- */
   const LS = {
     cart: "lastbite_cart_v1",
     orders: "lastbite_orders_v1",
@@ -10,7 +9,6 @@
     impact: "lastbite_user_impact_v1"
   };
 
-  /* ---------- helpers ---------- */
   function readJSON(key, fallback) {
     try {
       const raw = localStorage.getItem(key);
@@ -43,7 +41,6 @@
       .replaceAll("'", "&#039;");
   }
 
-  /* ---------- toast + modal ---------- */
   const modalRoot = document.getElementById("modalRoot");
   const toastRoot = document.getElementById("toastRoot");
 
@@ -59,7 +56,8 @@
   function closeModal() {
     if (!modalRoot) return;
     if (modalRoot._cleanup) modalRoot._cleanup();
-    modalRoot.hidden = true;
+    modalRoot.classList.remove("isOpen");   // IMPORTANT
+    modalRoot.hidden = true;                // extra safety
     modalRoot.innerHTML = "";
     modalRoot._cleanup = null;
   }
@@ -67,6 +65,7 @@
   function openModal({ title, bodyHTML, footerHTML, onMount }) {
     if (!modalRoot) return;
     modalRoot.hidden = false;
+    modalRoot.classList.add("isOpen");      // IMPORTANT
     modalRoot.innerHTML = `
       <div class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}">
         <div class="modal__head">
@@ -100,16 +99,9 @@
     if (typeof onMount === "function") onMount(modalRoot);
   }
 
-  /* ---------- header + nav ---------- */
   function setActiveNav() {
     const page = document.body.getAttribute("data-page");
-    const routeMap = {
-      home: "home",
-      deals: "deals",
-      how: "how",
-      mission: "mission",
-      impact: "impact"
-    };
+    const routeMap = { home: "home", deals: "deals", how: "how", mission: "mission", impact: "impact" };
     const route = routeMap[page];
 
     document.querySelectorAll("a[data-route]").forEach((a) => {
@@ -160,7 +152,6 @@
     });
   }
 
-  /* ---------- cart + impact ---------- */
   function getCart() {
     return readJSON(LS.cart, []);
   }
@@ -315,16 +306,20 @@
         const checkoutBtn = root.querySelector("#checkoutBtn");
         if (checkoutBtn) {
           checkoutBtn.addEventListener("click", () => {
-            if (!lines.length) return;
+            const linesNow = cartLines(getCart());
+            if (!linesNow.length) return;
+
+            const totalsNow = cartTotals(getCart());
+            const impactNow = computeImpactForCheckout(linesNow.map((l) => ({ qty: l.qty, mode: l.mode })));
 
             const order = {
               id: "ord_" + Date.now(),
               ts: Date.now(),
-              lines: lines.map((l) => ({ id: l.deal.id, qty: l.qty, mode: l.mode })),
-              subtotal,
-              original,
-              savings,
-              impact
+              lines: linesNow.map((l) => ({ id: l.deal.id, qty: l.qty, mode: l.mode })),
+              subtotal: totalsNow.subtotal,
+              original: totalsNow.original,
+              savings: totalsNow.savings,
+              impact: impactNow
             };
 
             const orders = readJSON(LS.orders, []);
@@ -333,32 +328,26 @@
 
             const ui = getUserImpact();
             const next = {
-              meals: ui.meals + impact.meals,
-              kgFood: ui.kgFood + impact.kgFood,
-              kgCO2e: ui.kgCO2e + impact.kgCO2e,
-              donated: ui.donated + impact.donated,
-              savings: ui.savings + savings
+              meals: ui.meals + impactNow.meals,
+              kgFood: ui.kgFood + impactNow.kgFood,
+              kgCO2e: ui.kgCO2e + impactNow.kgCO2e,
+              donated: ui.donated + impactNow.donated,
+              savings: ui.savings + totalsNow.savings
             };
             setUserImpact(next);
 
             setCart([]);
             closeModal();
-            toast("Checkout complete (demo): +" + impact.meals + " meals rescued");
+            toast("Checkout complete (demo): +" + impactNow.meals + " meals rescued");
 
-            // refresh impact page elements if on that page
-            if (document.body.getAttribute("data-page") === "impact") {
-              initImpactPage();
-            }
-            if (document.body.getAttribute("data-page") === "home") {
-              initHomePage();
-            }
+            if (document.body.getAttribute("data-page") === "impact") initImpactPage();
+            if (document.body.getAttribute("data-page") === "home") initHomePage();
           });
         }
       }
     });
   }
 
-  /* ---------- reserve flow (deals page) ---------- */
   function pctOff(deal) {
     return Math.round((1 - deal.price / deal.originalValue) * 100);
   }
@@ -618,7 +607,6 @@
     setInterval(render, 60000);
   }
 
-  /* ---------- home page ---------- */
   function initHomePage() {
     const form = document.getElementById("areaForm");
     const postal = document.getElementById("postal");
@@ -667,7 +655,6 @@
         const ok = D.PILOT_PREFIXES.includes(prefix);
 
         toast(ok ? "You're in our pilot zone (demo): " + val : "Not in pilot yet (demo): " + val + " — join the beta list.");
-        // refresh the pilot badge
         initHomePage();
       });
     }
@@ -695,7 +682,6 @@
     }
   }
 
-  /* ---------- mission page ---------- */
   function openPartnerModal() {
     openModal({
       title: "Become a partner",
@@ -745,7 +731,6 @@
     if (cta) cta.addEventListener("click", openPartnerModal);
   }
 
-  /* ---------- impact page ---------- */
   function initImpactPage() {
     const ui = getUserImpact();
     const c = D.IMPACT.communityBase;
@@ -758,6 +743,8 @@
       savings: c.savings + ui.savings
     };
 
+    const orders = readJSON(LS.orders, []);
+
     const y1 = document.getElementById("yourImpactRow1");
     const y2 = document.getElementById("yourImpactRow2");
     if (y1) {
@@ -767,7 +754,6 @@
         <div class="badge">🌿 ${Math.round(ui.kgCO2e).toLocaleString()} kg CO₂e</div>
       `;
     }
-    const orders = readJSON(LS.orders, []);
     if (y2) {
       y2.innerHTML = `
         <div class="badge badge--orange">🎗️ ${money(ui.donated)} donated</div>
@@ -842,7 +828,6 @@
     }
   }
 
-  /* ---------- footer links ---------- */
   function initFooterLinks() {
     const contact = document.getElementById("contactLink");
     if (contact) {
@@ -869,7 +854,6 @@
     }
   }
 
-  /* ---------- boot ---------- */
   function initCommon() {
     const year = document.getElementById("year");
     if (year) year.textContent = String(new Date().getFullYear());
@@ -880,6 +864,7 @@
 
     const cartBtn = document.getElementById("cartBtn");
     if (cartBtn) cartBtn.addEventListener("click", openCartModal);
+
     renderCartCount();
   }
 
