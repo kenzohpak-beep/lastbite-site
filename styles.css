@@ -631,3 +631,19 @@ html, body{
 .mobileNav{
   background: #ffffff !important;
 }
+/* Founder photo placeholders (iPhone-style aspect) */
+.founderPhoto{
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: var(--shadowSm);
+  aspect-ratio: 3 / 4; /* iPhone portrait feel */
+}
+
+.founderPhoto img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
