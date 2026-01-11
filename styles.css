@@ -392,17 +392,21 @@ small{ color: var(--muted); }
 .dealActions{ margin-top: 12px; display:flex; justify-content: space-between; align-items:center; gap: 10px; }
 .btn--block{ width: 100%; justify-content: center; }
 
+/* ---------- MODAL OVERLAY (FIX) ----------
+   Dim + unclickable happens when overlay is accidentally ON.
+   This keeps it OFF unless JS adds .isOpen. */
 .modalRoot{
   position: fixed;
   inset: 0;
   background: rgba(11,15,13,0.55);
-  display:flex;
+  display: none;              /* default OFF */
   align-items:center;
   justify-content:center;
   padding: 18px;
   z-index: 80;
 }
-.modalRoot[hidden]{ display:none !important; }
+.modalRoot.isOpen{ display: flex; }
+.modalRoot[hidden]{ display:none !important; } /* extra safety */
 
 .modal{
   width: min(760px, 100%);
