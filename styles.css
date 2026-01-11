@@ -695,3 +695,16 @@ html, body{
   font-weight: 1000;
   color: rgba(11,15,13,0.92);
 }
+/* Force visible thin grey outlines */
+.main .section > .container{
+  border: 1px solid #d7e2dc !important;
+}
+
+.card{
+  border: 1px solid #d7e2dc !important;
+}
+
+/* If you also want outlines on any “soft” sections */
+.section--soft .container{
+  border: 1px solid #d7e2dc !important;
+}
