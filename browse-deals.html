@@ -1,1 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LastBite — Browse Deals</title>
+    <meta name="description" content="Browse surplus-only end-of-day deals at 40–70% off." />
+    <meta name="theme-color" content="#193B1B" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
 
+  <body data-page="deals">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="header">
+      <div class="container header__inner">
+        <a class="brand" href="./index.html" aria-label="LastBite home">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__text">
+            <strong>LastBite</strong>
+            <small>Save food. Save money.</small>
+          </span>
+        </a>
+
+        <nav class="nav nav--desktop" aria-label="Primary">
+          <a href="./index.html" data-route="home">Home</a>
+          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
+          <a href="./how-it-works.html" data-route="how">How It Works</a>
+          <a href="./our-mission.html" data-route="mission">Our Mission</a>
+          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+        </nav>
+
+        <div class="header__actions">
+          <button class="btn btn--ghost" type="button" id="cartBtn">
+            Cart <span class="pill" id="cartCount">0</span>
+          </button>
+          <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
+
+          <button
+            class="btn btn--ghost navToggle"
+            type="button"
+            id="navToggle"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobileNav"
+          >
+            ☰
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav nav--mobile" id="mobileNav" aria-label="Primary mobile" hidden>
+        <div class="container nav--mobile__inner">
+          <a href="./index.html" data-route="home">Home</a>
+          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
+          <a href="./how-it-works.html" data-route="how">How It Works</a>
+          <a href="./our-mission.html" data-route="mission">Our Mission</a>
+          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="container">
+        <section class="card hero">
+          <div class="hero__inner">
+            <div class="hero__kicker">Browse end-of-day deals • Prototype listings</div>
+            <h1 class="h2" style="margin-top:10px;">Surplus-only marketplace. Big guaranteed discounts.</h1>
+            <p class="muted" style="margin:6px 0 0;">
+              These are sample deals for a prototype. Not affiliated with the businesses listed.
+            </p>
+
+            <div class="hero__stats">
+              <span class="statPill">💸 Typical discount <b>40–70%</b></span>
+              <span class="statPill">🕗 Orders cluster at <b>closing time</b></span>
+              <span class="statPill">🎗️ <b>5%</b> of profits donated</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section__head">
+            <div>
+              <h2 class="h2">Browse Deals</h2>
+              <p class="muted" style="margin:0;">Filter by category, partner, and tags. Sort by value or pickup window.</p>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="chips" id="categoryChips" aria-label="Category chips"></div>
+
+            <div class="toolbar__grid" style="margin-top:12px;">
+              <div class="field">
+                <label for="q">Search</label>
+                <input id="q" placeholder="e.g., bagels, croissants, cheesecake" />
+              </div>
+
+              <div class="field">
+                <label for="partner">Partner</label>
+                <select id="partner"></select>
+              </div>
+
+              <div class="field">
+                <label for="tag">Tag</label>
+                <select id="tag"></select>
+              </div>
+
+              <div class="field">
+                <label for="sort">Sort</label>
+                <select id="sort"></select>
+              </div>
+            </div>
+
+            <div class="resultsBar">
+              <div class="muted" id="resultsCount">Showing deals…</div>
+              <div class="tiny muted">Tip: deals refresh near closing time.</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="dealsGrid" id="dealsGrid"></div>
+
+            <div id="emptyState" class="card" style="display:none; margin-top:16px;">
+              <div class="card__pad">
+                <strong>No deals match your filters.</strong>
+                <p class="muted" style="margin:6px 0 0;">Try clearing tags or switching categories.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div>
+          <div class="footer__brand">
+            <span class="brand__mark" aria-hidden="true"></span>
+            <strong>LastBite</strong>
+          </div>
+          <p class="muted">
+            End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
+          </p>
+          <p class="tiny muted">Prototype site: checkout is simulated; impact numbers are estimates.</p>
+        </div>
+
+        <div>
+          <strong>Explore</strong>
+          <div class="footer__links">
+            <a href="./browse-deals.html">Browse Deals</a>
+            <a href="./how-it-works.html">How It Works</a>
+            <a href="./our-mission.html">Our Mission</a>
+            <a href="./impact-tracker.html">Impact Tracker</a>
+          </div>
+        </div>
+
+        <div>
+          <strong>Contact</strong>
+          <div class="footer__links">
+            <a href="#" id="contactLink">Email</a>
+            <a href="#" id="partnerLink">Become a partner</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container footer__bottom">
+        <span class="tiny muted">© <span id="year"></span> LastBite</span>
+        <span class="tiny muted">Static site (GitHub Pages friendly)</span>
+      </div>
+    </footer>
+
+    <div id="modalRoot" class="modalRoot" hidden></div>
+    <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="./data.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
