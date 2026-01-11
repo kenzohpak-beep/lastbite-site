@@ -591,3 +591,43 @@ textarea:focus{
   justify-content:space-between;
   flex-wrap: wrap;
 }
+/* Site-wide green background */
+html, body{
+  background: #2f8c6b !important;
+}
+
+/* Keep main content readable as white cards on the green background */
+.main{
+  background: transparent !important;
+}
+
+/* Ensure sections don’t become translucent overlays */
+.section,
+.section--soft{
+  background: transparent !important;
+}
+
+/* Give the main content area a centered white “canvas” */
+.container{
+  position: relative;
+}
+
+.main .container > .card,
+.main .card{
+  background: #ffffff;
+}
+
+/* Optional: add a soft page frame by wrapping sections visually */
+.section .container{
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(230,239,233,0.9);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+/* Keep header/footer white */
+.header,
+.footer,
+.mobileNav{
+  background: #ffffff !important;
+}
