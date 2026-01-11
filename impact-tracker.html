@@ -1,1 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LastBite — Impact Tracker</title>
+    <meta name="description" content="Track your rescued meals, food saved, CO2 avoided, and estimated donations (demo)." />
+    <meta name="theme-color" content="#193B1B" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
 
+  <body data-page="impact">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="header">
+      <div class="container header__inner">
+        <a class="brand" href="./index.html" aria-label="LastBite home">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__text">
+            <strong>LastBite</strong>
+            <small>Save food. Save money.</small>
+          </span>
+        </a>
+
+        <nav class="nav nav--desktop" aria-label="Primary">
+          <a href="./index.html" data-route="home">Home</a>
+          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
+          <a href="./how-it-works.html" data-route="how">How It Works</a>
+          <a href="./our-mission.html" data-route="mission">Our Mission</a>
+          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+        </nav>
+
+        <div class="header__actions">
+          <button class="btn btn--ghost" type="button" id="cartBtn">
+            Cart <span class="pill" id="cartCount">0</span>
+          </button>
+          <a class="btn btn--primary" href="./browse-deals.html">Browse Deals</a>
+
+          <button
+            class="btn btn--ghost navToggle"
+            type="button"
+            id="navToggle"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobileNav"
+          >
+            ☰
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav nav--mobile" id="mobileNav" aria-label="Primary mobile" hidden>
+        <div class="container nav--mobile__inner">
+          <a href="./index.html" data-route="home">Home</a>
+          <a href="./browse-deals.html" data-route="deals">Browse Deals</a>
+          <a href="./how-it-works.html" data-route="how">How It Works</a>
+          <a href="./our-mission.html" data-route="mission">Our Mission</a>
+          <a href="./impact-tracker.html" data-route="impact">Impact Tracker</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="container">
+        <section class="card hero">
+          <div class="hero__inner">
+            <div class="hero__kicker">Impact Tracker</div>
+            <h1 class="h2" style="margin-top:10px;">See what you’ve rescued (demo).</h1>
+            <p class="muted" style="margin:0;">
+              Your impact updates when you complete a <strong>Checkout (demo)</strong>.
+            </p>
+          </div>
+        </section>
+
+        <section class="section grid grid--2">
+          <div class="card"><div class="card__pad">
+            <h2 class="h2">Your impact</h2>
+            <div class="grid grid--3" style="margin-top:12px; gap:10px;" id="yourImpactRow1"></div>
+            <div class="grid grid--3" style="margin-top:10px; gap:10px;" id="yourImpactRow2"></div>
+
+            <div class="section" style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+              <a class="btn btn--primary" href="./browse-deals.html">Browse deals</a>
+              <button class="btn btn--ghost" type="button" id="resetImpact">Reset my demo data</button>
+            </div>
+
+            <p class="tiny muted" style="margin-top:12px;">
+              “Donated” is an estimate: 5% of assumed gross profit (demo unit economics).
+            </p>
+          </div></div>
+
+          <div class="card"><div class="card__pad">
+            <h2 class="h2">Community totals (demo + you)</h2>
+            <p class="muted" style="margin:0;">A baseline demo counter plus your local demo actions.</p>
+            <div class="grid grid--3" style="margin-top:12px; gap:10px;" id="communityRow1"></div>
+            <div class="grid grid--3" style="margin-top:10px; gap:10px;" id="communityRow2"></div>
+          </div></div>
+        </section>
+
+        <section class="section">
+          <div class="section__head">
+            <div>
+              <h2 class="h2">Recent checkouts</h2>
+              <p class="muted" style="margin:0;">Latest 10 demo orders.</p>
+            </div>
+          </div>
+
+          <div class="grid" style="gap:12px;" id="recentOrders"></div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div>
+          <div class="footer__brand">
+            <span class="brand__mark" aria-hidden="true"></span>
+            <strong>LastBite</strong>
+          </div>
+          <p class="muted">
+            End-of-day surplus deals at <strong>40–70% off</strong>. Pickup or delivery. 5% of profits donated to WFP.
+          </p>
+          <p class="tiny muted">Prototype site: checkout is simulated; impact numbers are estimates.</p>
+        </div>
+
+        <div>
+          <strong>Explore</strong>
+          <div class="footer__links">
+            <a href="./browse-deals.html">Browse Deals</a>
+            <a href="./how-it-works.html">How It Works</a>
+            <a href="./our-mission.html">Our Mission</a>
+            <a href="./impact-tracker.html">Impact Tracker</a>
+          </div>
+        </div>
+
+        <div>
+          <strong>Contact</strong>
+          <div class="footer__links">
+            <a href="#" id="contactLink">Email</a>
+            <a href="#" id="partnerLink">Become a partner</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container footer__bottom">
+        <span class="tiny muted">© <span id="year"></span> LastBite</span>
+        <span class="tiny muted">Static site (GitHub Pages friendly)</span>
+      </div>
+    </footer>
+
+    <div id="modalRoot" class="modalRoot" hidden></div>
+    <div id="toastRoot" class="toastRoot" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="./data.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
