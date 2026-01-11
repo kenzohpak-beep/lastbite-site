@@ -86,24 +86,20 @@ p{ margin: 0 0 12px; }
 }
 
 /* ---------- Home page background (PNG) ---------- */
-.homeBg{
-  background-image: url("./assets/home-bg.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+/* Home page background (PNG) */
+body.homeBg{
+  background: url("assets/home-bg.png") center / cover no-repeat fixed;
 }
 
-/* Keep content readable over the image */
-.homeBg .main{
+/* Readability overlay (still shows image behind) */
+body.homeBg .main{
   background: rgba(255,255,255,0.92);
 }
 
 @media (max-width: 900px){
-  .homeBg{ background-attachment: scroll; }
-  .homeBg .main{ background: rgba(255,255,255,0.96); }
+  body.homeBg{ background-attachment: scroll; }
+  body.homeBg .main{ background: rgba(255,255,255,0.96); }
 }
-
 /* ---------- Header (WHITE) ---------- */
 .header{
   position: sticky;
