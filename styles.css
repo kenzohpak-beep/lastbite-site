@@ -708,3 +708,38 @@ html, body{
 .section--soft .container{
   border: 1px solid #d7e2dc !important;
 }
+/* Mission stats block */
+.statsGrid{
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.statCard{
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fff;
+  padding: 14px;
+}
+
+.statBig{
+  font-weight: 1200;
+  letter-spacing: -0.02em;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--primary2);
+}
+
+.statLabel{
+  margin-top: 8px;
+  color: rgba(11,15,13,0.78);
+  font-weight: 900;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+@media (max-width: 900px){
+  .statsGrid{ grid-template-columns: 1fr; }
+  .statBig{ font-size: 28px; }
+}
