@@ -743,3 +743,26 @@ html, body{
   .statsGrid{ grid-template-columns: 1fr; }
   .statBig{ font-size: 28px; }
 }
+/* Mission stats: make the numbers more prominent */
+.statsGrid .statBig{
+  font-size: 44px;
+  font-weight: 1300;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--ink);
+}
+
+.statsGrid .statLabel{
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.statsGrid .statCard{
+  border-width: 2px;
+  box-shadow: 0 14px 30px rgba(11,15,13,0.12);
+}
+
+/* Slightly reduce on smaller screens */
+@media (max-width: 900px){
+  .statsGrid .statBig{ font-size: 40px; }
+}
