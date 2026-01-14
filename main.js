@@ -251,11 +251,14 @@
   }
 
   function renderCartCount() {
-    const el = document.getElementById("cartCount");
-    if (!el) return;
     const cart = getCart();
     const n = cart.reduce((sum, it) => sum + (Number(it.qty) || 0), 0);
-    el.textContent = String(n);
+
+    const el = document.getElementById("cartCount");
+    if (el) el.textContent = String(n);
+
+    const elMobile = document.getElementById("cartCountMobile");
+    if (elMobile) elMobile.textContent = String(n);
   }
 
   window.addEventListener("pageshow", renderCartCount);
@@ -430,18 +433,25 @@
   }
 
   function parseEndTimeToday(hhmm) {
-    const [h, m] = hhmm.split(":").map(Number);
+    const [h, m] = String(hhmm || "23:59").split(":").map(Number);
     const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0, 0);
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), h || 0, m || 0, 0, 0);
   }
 
-  function endsLabel(windowEnd) {
+  // CHANGED: never blocks ordering; if window already passed, show pickup window instead of "Pickup closed"
+  function endsLabel(windowEnd, windowText) {
     const end = parseEndTimeToday(windowEnd);
     const now = new Date();
     const diff = end.getTime() - now.getTime();
-    if (diff <= 0) return { text: "Pickup closed", severity: "muted" };
+
+    if (diff <= 0) {
+      const w = String(windowText || "").trim();
+      return { text: w ? "Pickup window: " + w : "Pickup window shown on deal", severity: "muted" };
+    }
+
     const mins = Math.round(diff / 60000);
     if (mins <= 120) return { text: "Ends in " + mins + "m", severity: "orange" };
+
     const time = end.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     return { text: "Ends " + time, severity: "muted" };
   }
@@ -449,7 +459,7 @@
   function buildDealCard(deal) {
     const off = pctOff(deal);
     const tags = (deal.tags || []).concat(deal.dietary || []);
-    const end = endsLabel(deal.windowEnd);
+    const end = endsLabel(deal.windowEnd, deal.window);
 
     const endBadge =
       end.severity === "orange"
@@ -459,8 +469,6 @@
     const deliveryBadge = deal.deliveryAvailable
       ? `<span class="badge badge--lime">🚚 Delivery</span>`
       : `<span class="badge">🏃 Pickup</span>`;
-
-    const canOrder = end.text !== "Pickup closed";
 
     return `
       <article class="card dealCard">
@@ -488,10 +496,10 @@
           </div>
 
           <div class="dealActions">
-            <button class="btn btn--primary btn--block" type="button" data-reserve="${escapeHTML(deal.id)}" ${canOrder ? "" : "disabled"}>
+            <button class="btn btn--primary btn--block" type="button" data-reserve="${escapeHTML(deal.id)}">
               Choose pickup/delivery
             </button>
-            <button class="btn btn--ghost btn--block" type="button" data-quickadd="${escapeHTML(deal.id)}" ${canOrder ? "" : "disabled"}>
+            <button class="btn btn--ghost btn--block" type="button" data-quickadd="${escapeHTML(deal.id)}">
               Quick add (Pickup)
             </button>
           </div>
@@ -803,7 +811,6 @@
     const page = document.body.getAttribute("data-page");
     if (page !== "impact") return;
 
-    // If they already have a section container in HTML, we won't auto-inject
     const already =
       document.getElementById("allUsersImpactRow1") ||
       document.getElementById("globalImpactRow1") ||
@@ -835,7 +842,6 @@
       </div>
     `;
 
-    // Insert near top of the page content
     if (mainContainer.firstChild) mainContainer.insertBefore(block, mainContainer.firstChild);
     else mainContainer.appendChild(block);
   }
@@ -848,7 +854,6 @@
     const gl = getGlobalImpact();
     const orders = readJSON(LS.orders, []);
 
-    // Your impact (rows)
     const y1 = document.getElementById("yourImpactRow1");
     const y2 = document.getElementById("yourImpactRow2");
 
@@ -874,7 +879,6 @@
     setText("yourSavings", money(ui.savings));
     setText("yourOrders", String(orders.length));
 
-    // Company impact rows (supports multiple possible IDs)
     const c1 =
       document.getElementById("companyImpactRow1") ||
       document.getElementById("communityImpactRow1") ||
@@ -906,7 +910,6 @@
     setText("companyDonated", money(co.donated));
     setText("companySavings", money(co.savings));
 
-    // All users (global) rows (supports multiple IDs + auto-injected)
     const g1 =
       document.getElementById("allUsersImpactRow1") ||
       document.getElementById("globalImpactRow1") ||
@@ -939,14 +942,12 @@
     setText("globalSavings", money(gl.savings));
     setText("globalOrders", Number(gl.orders || 0).toLocaleString());
 
-    // Factors line
     const f = impactFactors();
     const factorLine = document.getElementById("factorLine");
     if (factorLine) {
       factorLine.textContent = `${f.kgFoodPerMeal} kg food/meal • ${f.kgCO2ePerMeal} kg CO₂e/meal`;
     }
 
-    // Recent orders
     const recent = document.getElementById("recentOrders");
     if (recent && D?.DEALS) {
       const rows = orders.slice(0, 10).map((o) => {
@@ -985,7 +986,6 @@
         `<div class="card"><div class="card__pad"><p class="muted">No orders yet. Add deals and place an order from your cart.</p></div></div>`;
     }
 
-    // Reset (user + company + global)
     const reset = document.getElementById("resetImpact");
     if (reset) {
       reset.addEventListener("click", () => {
@@ -1170,7 +1170,6 @@
       orders.unshift(order);
       writeJSON(LS.orders, orders.slice(0, 30));
 
-      // Update "Your impact"
       const ui = getUserImpact();
       const nextUser = {
         meals: Number(ui.meals || 0) + impact.meals,
@@ -1181,7 +1180,6 @@
       };
       setUserImpact(nextUser);
 
-      // Update "Company impact"
       const co = getCompanyImpact();
       const nextCompany = {
         meals: Number(co.meals || 0) + impact.meals,
@@ -1192,7 +1190,6 @@
       };
       setCompanyImpact(nextCompany);
 
-      // Update "All users" (fake totals)
       const gl = getGlobalImpact();
       const nextGlobal = {
         orders: Number(gl.orders || 0) + 1,
