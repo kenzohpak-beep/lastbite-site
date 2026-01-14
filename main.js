@@ -669,6 +669,12 @@
       const sorted = sortDeals(filtered);
 
       gridEl.innerHTML = sorted.map(buildDealCard).join("");
+      // FORCE: allow ordering anytime (show pickup window but never disable ordering)
+gridEl.querySelectorAll("[data-reserve],[data-quickadd]").forEach((btn) => {
+  btn.disabled = false;
+  btn.removeAttribute("disabled");
+  btn.style.pointerEvents = "auto";
+});
       resultsEl.textContent = "Showing " + sorted.length + " deal" + (sorted.length === 1 ? "" : "s") + ".";
       emptyEl.style.display = sorted.length ? "none" : "block";
 
